@@ -85,7 +85,7 @@
 		}
 		inf = document.createElement('div');
 		inf.id = 'info';
-		inf.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and MathExpression.js<br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can try out the beta version <a href="/calculatoure/full/">here</a>. (Also for unobfuscated code)';
+		inf.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
 		document.body.appendChild(inf);
 		setTimeout(function(){Jin.addClass(inf, 'active');}, 1);
 		Jin.bind(inf, 'click', function(){ info(); });
@@ -135,9 +135,9 @@
 		{
 			if (mexpr[i].type === 'Whitespace')
 				continue;
-			if (mexpr[i].type === 'Number')
+			if (mexpr[i].type === 'Number' || mexpr[i].type === 'Hexadecimal' || mexpr[i].type === 'Octal')
 			{
-				expr += mexpr[i].content + ' ';
+				expr += mexpr[i].content;
 				continue;
 			}
 			switch(mexpr[i].content.toLowerCase())
@@ -155,9 +155,14 @@
 				case '^':
 				case '~':
 				case '&&':
+				case '&':
 				case '||':
+				case '|':
 				case '>':
+				case '>>':
+				case '>>>':
 				case '<':
+				case '<<':
 				case '>=':
 				case '<=':
 				case '!':
@@ -226,7 +231,7 @@
 			switch(e.which)
 			{
 				case 13:
-					calculate(new MathExpression(typebox.value));
+					calculate(new CodeExpression(typebox.value, 'JavaScript'));
 					if (memhist.position != 0)
 						memhist.unshift(typebox.value);
 					memhist.position = -1;
@@ -254,7 +259,7 @@
 		numpadButtons = Jin(document.getElementById('numpad').getElementsByTagName('button'));
 		numpadButtons.bind('click', function(){ var str = this.innerHTML.replace(/&lt;/, '<').replace(/&gt;/, '>'); if(str == 'clear') typebox.value = ''; else pushStr(str+((str.length > 2 && str !== 'random') ? '(' : '')) });
 		Jin.bind(document.getElementById('calculate'), 'click', function(){
-			calculate(new MathExpression(typebox.value));
+			calculate(new CodeExpression(typebox.value, 'JavaScript'));
 			memhist.unshift(typebox.value);
 			memhist.position = -1;
 			typebox.value = '';

@@ -1,0 +1,11 @@
+clear	pow	asin	sin	round	!=	!	=	>>>	^	~	&	|	%
+help	sqrt	acos	cos	floor	!==	&&	<	>>	A	7	8	9	+
+info	log	atan	tan	ceil	===	||	>	<<	B	4	5	6	-
+random	exp	atan2	PI	frac	(	?	<=	E	C	3	2	1	*
+whack	e	max	min	abs	)	:	>=	F	D	x	0	.	/
+
+num	exp	tri	tri	sta	op	op	op	op	op	op	op	op	op
+op	exp	tri	tri	sta	op	op	op	op	num	num	num	num	op
+op	exp	tri	tri	sta	op	op	op	op	num	num	num	num	op
+sta	exp	tri	tri	sta	op	op	op	num	num	num	num	num	op
+sta	exp	sta	sta	sta	op	op	op	num	num	num	num	num	op
