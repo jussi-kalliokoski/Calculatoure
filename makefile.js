@@ -72,7 +72,7 @@ function compress(directory)
 
 function makeHTML(directory)
 {
-	shell("cd html/;makejs");
+	shell("cd html/ && ls && makejs");
 	shell("cp temp/index.html " + directory);
 }
 

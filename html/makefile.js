@@ -1,3 +1,4 @@
+echo ('Generating HTML files...');
 function all()
 {
 	var html = open('calculatoure.html').split('<!-- BUTTONS -->'),
@@ -12,9 +13,9 @@ function all()
 	for (i=0; i<layoutCaptions.length; i++)
 	{
 		layout = [];
-		for (n=0; i<layoutCaptions[i].length; i++)
+		for (n=0; n<layoutCaptions[i].length; n++)
 			layout[n] = '<button class="' + layoutTypes[i][n] + '">' + layoutCaptions[i][n] + '</button>';
-		out.push(layout);
+		out.push(layout.join(''));
 	}
-	save('../temp/index.html', out.join('<br />'));
+	save('../temp/index.html', html[0] + out.join('<br />') + html[1]);
 }

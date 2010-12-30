@@ -110,7 +110,7 @@ button
 /*# */
 }
 
-#numpad button:nth-child(13n+6)
+#numpad button:nth-child(15n+6), #numpad button:nth-child(15n+9)
 {
 	margin-left: 5px;
 }
