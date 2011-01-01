@@ -17,8 +17,8 @@ function common()
 	var flags = ['common'].concat(globalFlags);
 	compile(flags);
 	compress("common");
-	shell("cp img/* common/");
 	makeHTML("common");
+	copyImages("common");
 }
 
 function webkit()
@@ -27,8 +27,8 @@ function webkit()
 	var flags = ['webkit'].concat(globalFlags);
 	compile(flags);
 	compress("webkit");
-	shell("cp img/* webkit/");
 	makeHTML("webkit");
+	copyImages("webkit");
 }
 
 function mobile()
@@ -37,8 +37,8 @@ function mobile()
 	var flags = ['mobile'].concat(globalFlags);
 	compile(flags);
 	compress("mobile");
-	shell("cp img/* mobile/");
 	makeHTML("mobile");
+	copyImages("mobile");
 }
 
 function clean()
@@ -76,7 +76,18 @@ function makeHTML(directory)
 	shell("cp temp/index.html " + directory);
 }
 
+function copyImages(directory)
+{
+	shell("cp img/Coalition.ttf " + directory);
+	shell("cp img/favicon.png " + directory);
+}
+
 function debug()
 {
 	globalFlags.push('debug');
+}
+
+function onfinish()
+{
+	echo("Done!");
 }
