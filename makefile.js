@@ -10,7 +10,7 @@ var version = 0.991,
 globalFlags = ["compress", "gzip"];
 echo ("Building CALCULATOURE (v. " + version + ")");
 
-import("js/conditional.js");
+import("conditional.js");
 
 function all()
 {
@@ -65,9 +65,9 @@ function compile(flags)
 	shell("cd deps/codeexpression-js/;makejs");
 	var data = open("js/jin.js") +
 		open("deps/codeexpression-js/CodeExpression.min.js") +
-		ConditionalJS.parse(open("js/calculatoure.js"), flags)();
+		Conditional.parseJS(open("js/calculatoure.js"), flags)();
 	save("temp/calculatoure.js", data);
-	data = ConditionalJS.parse(open("css/calculatoure.css"), flags)();
+	data = Conditional.parseJS(open("css/calculatoure.css"), flags)();
 	save("temp/calculatoure.css", data);
 }
 
