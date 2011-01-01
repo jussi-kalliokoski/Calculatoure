@@ -120,6 +120,10 @@ button.op
 	background-color: rgba(255,0,0,0.2);
 	font-family: 'Vollkorn', arial, serif;
 }
+button.help
+{
+	background-color: rgba(255,0,0,0.2);
+}
 button.tri
 {
 	background-color: rgba(100,255,0,0.2);

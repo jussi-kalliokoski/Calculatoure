@@ -123,55 +123,34 @@
 		}
 		catch(e)
 		{
+/*# if(f.debug) */
 			console.log(expr);
+/*# */
 			addLine(e, 'error');
 		}
 	}
 
+	var acceptAsIs = ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','==','==='],
+	mathFunctions = ['pow','sin','asin','cos','acos','tan','atan','atan2','pow','floor','ceil','round','abs','sqrt','max','min','log','exp'],
+	customFunctions = ['whack', 'frac', 'help', 'info', 'x'];
+
 	function createExpr(mexpr)
 	{
-		var i, expr = '';
+		var i, expr = '', content, type;
 		for(i=0; i < mexpr.length; i++)
 		{
-			if (mexpr[i].type === 'Whitespace')
+			content = mexpr[i].content.toLowerCase();
+			type = mexpr[i].type;
+			if (type === 'Whitespace')
 				continue;
-			if (mexpr[i].type === 'Number' || mexpr[i].type === 'Hexadecimal' || mexpr[i].type === 'Octal')
+			if (type === 'Number' || type === 'Hexadecimal' || type === 'Octal')
+				expr += content;
+			else if (isIn(content, acceptAsIs) || isIn(content, customFunctions))
+				expr += content;
+			else if (isIn(content, mathFunctions))
+				expr += 'Math.'+content;
+			else switch(content)
 			{
-				expr += mexpr[i].content;
-				continue;
-			}
-			switch(mexpr[i].content.toLowerCase())
-			{
-				case '+':
-				case '-':
-				case '/':
-				case '*':
-				case '%':
-				case '(':
-				case ')':
-				case ',':
-				case ':':
-				case '?':
-				case '^':
-				case '~':
-				case '&&':
-				case '&':
-				case '||':
-				case '|':
-				case '>':
-				case '>>':
-				case '>>>':
-				case '<':
-				case '<<':
-				case '>=':
-				case '<=':
-				case '!':
-				case '!=':
-				case '!==':
-				case '==':
-				case '===':
-					expr += mexpr[i].content;
-					break;
 				case '=':
 					expr += '==';
 					break;
@@ -182,35 +161,8 @@
 				case 'random':
 					expr += 'Math.random()';
 					break;
-				case 'pow':
-				case 'sin':
-				case 'asin':
-				case 'cos':
-				case 'acos':
-				case 'tan':
-				case 'atan':
-				case 'atan2':
-				case 'pow':
-				case 'floor':
-				case 'ceil':
-				case 'round':
-				case 'abs':
-				case 'sqrt':
-				case 'max':
-				case 'min':
-				case 'log':
-				case 'exp':
-					expr += 'Math.'+mexpr[i].content.toLowerCase();
-					break;
 				case 'e':
 					expr += 'Math.E';
-					break;
-				case 'whack':
-				case 'frac':
-				case 'help':
-				case 'info':
-				case 'x':
-					expr += mexpr[i].content.toLowerCase();
 					break;
 				default:
 					throw 'Unexpected ' + mexpr[i].type;
@@ -257,7 +209,7 @@
 			}
 		});
 		numpadButtons = Jin(document.getElementById('numpad').getElementsByTagName('button'));
-		numpadButtons.bind('click', function(){ var str = this.innerHTML.replace(/&lt;/, '<').replace(/&gt;/, '>'); if(str == 'clear') typebox.value = ''; else pushStr(str+((str.length > 2 && str !== 'random') ? '(' : '')) });
+		numpadButtons.bind('click', function(){ fixData(this); });
 		Jin.bind(document.getElementById('calculate'), 'click', function(){
 			calculate(new CodeExpression(typebox.value, 'JavaScript'));
 			memhist.unshift(typebox.value);
@@ -266,6 +218,20 @@
 		});
 		Jin.bind(document.getElementById('header'), 'click', function(){ info(); });
 	});
+
+	function fixData(button)
+	{
+		var	str	= button.innerHTML
+				.replace(/&lt;/g, '<')
+				.replace(/&gt;/g, '>')
+				.replace(/&amp;/g, '&'),
+			cl	= button.className;
+		if(str == 'clear')
+			return typebox.value = '';
+		if (cl !== 'op' && cl !== 'num' && str.length > 2)
+			str += '(';
+		pushStr(str);
+	}
 
 	function addLine(str, type)
 	{
@@ -286,5 +252,13 @@
 /*# if (!f.mobile) */
 		typebox.focus();
 /*# */
+	}
+
+	function isIn(needle, haystack)
+	{
+		for (var i=0, l=haystack.length; i<l; i++)
+			if (haystack[i] === needle)
+				return true;
+		return false;
 	}
 })(window);
