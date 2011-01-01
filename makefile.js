@@ -1,5 +1,13 @@
+Array.prototype.isIn = function(needle)
+{
+	for (var i=0, l=this.length; i<l; i++)
+		if (this[i] === needle)
+			return true;
+	return false;
+}
+
 var version = 0.991,
-globalFlags = [];
+globalFlags = ["compress", "gzip"];
 echo ("Building CALCULATOURE (v. " + version + ")");
 
 import("js/conditional.js");
@@ -65,9 +73,16 @@ function compile(flags)
 
 function compress(directory)
 {
+	if (!globalFlags.isIn("gzip"))
+		return;
 	echo ("Compressing...");
 	shell("yui-compressor temp/calculatoure.js -o " + directory + "/calculatoure.js");
 	shell("yui-compressor temp/calculatoure.css -o " + directory + "/calculatoure.css");
+	if (globalFlags.isIn("gzip"))
+	{
+		shell("cd " + directory + "; gzip calculatoure.js -c -f > calculatoure.jgz");
+		shell("cp misc/htaccess_for_jgz " + directory + "/.htaccess");
+	}
 }
 
 function makeHTML(directory)
