@@ -17,5 +17,6 @@ function all()
 			layout[n] = '<button class="' + layoutTypes[i][n] + '">' + layoutCaptions[i][n] + '</button>';
 		out.push(layout.join(''));
 	}
-	save('../temp/index.html', html[0] + out.join('<br />') + html[1]);
+	var buttons = out.join('<br />');
+	save('../temp/index.html', html[0] + buttons + html[1]);
 }
