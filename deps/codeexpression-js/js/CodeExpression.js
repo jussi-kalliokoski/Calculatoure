@@ -6,7 +6,7 @@ var CodeExpression = (function(){
 		var left = str, tokens = [], token, tokentype, stuck = 0, i;
 		while(left.length)
 		{
-			if (stuck++ > str.length) throw('Error in tokenizing string '+left);
+			if (stuck++ > str.length) throw('Error in tokenizing string at '+getLineAndCol(str.length - left.length, str));
 			token = '';
 			for (i=0; i<checks.length && !token; i++)
 			{
@@ -67,6 +67,27 @@ var CodeExpression = (function(){
 				s.push(this[i].content+' ('+this[i].type+')');
 			return s.toString();
 		};
+	}
+
+	function getLineAndCol(pos, str)
+	{
+		var newp = p = line = col = 0;
+		do
+		{
+			newp = str.indexOf('\n');
+			if (newp >= pos)
+			{
+				col = pos - p;
+				break;
+			}
+			p = newp;
+			line++;
+		} while (p < pos);
+		p = {line: line, col: col,
+		toString: function(){
+			return 'line ' + this.line + ', col ' + this.col;
+		}};
+		return p;
 	}
 
 	function Language(name)

@@ -2,6 +2,7 @@
 	var
 		identifierBeginsWith		= /[a-zA-Z_\$]/,
 		identifierContinuesWith		= /[a-zA-Z0-9_\$]/,
+		crazyRegExpMatch		= /\/(\\[^\x00-\x1f]|\[(\\[^\x00-\x1f]|[^\x00-\x1f\\\/])*\]|[^\x00-\x1f\\\/\[])+\/[gim]*/, //GEEZ, this is horrifying, but can't think of a better way to do this.
 		reservedWords			= ['boolean', 'break', 'byte', 'case', 'catch', 'char', 'continue', 'default', 'delete', 'do', 'double', 'else', 'false', 'final', 'finally', 'float', 'for', 'function', 'if', 'in', 'instanceof', 'int', 'long', 'new', 'null', 'return', 'short', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'var', 'void', 'while', 'with'],
 		keyWords			= ['abstract', 'debugger', 'enum', 'goto', 'implements', 'native', 'protected', 'synchronized', 'throws', 'transient', 'volatile'],
 		futureWords			= ['as', 'class', 'export', 'extends', 'import', 'interface', 'is', 'namespace', 'package', 'private', 'public', 'static', 'super', 'use'];
@@ -16,30 +17,6 @@
 				return true;
 		return false;
 	}
-
-	JS.addRule('RegExp', function(left, str){
-		if (left[0] !== '/')
-			return;
-		var token = left[0],
-		nextChar = '\\',
-		temp = left.substr(token.length),
-		searchQuery = /[^\/\\]/;
-		while(nextChar === '\\')
-		{
-			if (temp[0] === '\\')
-			{
-				token += '\\'+temp[1];
-				temp = temp.substr(2);
-			}
-			token += devourToken(temp, searchQuery);
-			temp = left.substr(token.length);
-			nextChar = temp[0];
-		}
-		if (left.length === token.length || token.length == 1)
-			return; // Comment, not a RegExp, or unterminated RegExp.
-		token += left[token.length];
-		return token;
-	});
 
 	JS.addRule('Comment', function(left, str){
 		if (left.substr(0, 2) !== '/*')
@@ -60,6 +37,33 @@
 	JS.addRule('Comment', function(left, str){
 		if (left.substr(0, 2) === '//')
 			return devourToken(left, /[^\n]/);
+	});
+
+	JS.addRule('RegExp', function(left, str){
+		if (left.search(crazyRegExpMatch) === 0)
+			return left.match(crazyRegExpMatch)[0];
+		/*if (left[0] !== '/') // Well I don't think this, the old way, is much better, especially considering it malfunctions.
+			return;
+		var token = left[0],
+		nextChar = '\\',
+		temp = left.substr(token.length),
+		searchQuery = /[^\/\\]/;
+		while(nextChar === '\\')
+		{
+			if (temp[0] === '\\')
+			{
+				token += '\\'+temp[1];
+				temp = temp.substr(2);
+			}
+			token += devourToken(temp, searchQuery);
+			temp = left.substr(token.length);
+			nextChar = temp[0];
+		}
+		if (left.length === token.length || token.length == 1)
+			return; // Comment, not a RegExp, or unterminated RegExp.
+		token += left[token.length];
+		token += devourToken(left.substr(token.length), /[gim]/);
+		return token;*/
 	});
 
 	JS.addRule('String', function(left, str){
@@ -86,25 +90,19 @@
 		return token;
 	});
 
-	JS.addRule('ReservedWord', function(left, str){
-		if (left.search(/[a-z]/) === 0)
-		{
-			var tok = devourToken(left, /[a-z]/), r = {content: tok};
-			if (isIn(tok, reservedWords))
-				return tok;
-			else if (isIn(tok, keyWords))
-				r.type = 'KeyWord';
-			else if (isIn(tok, futureWords))
-				r.type = 'FutureWord';
-			else
-				return;
-			return r;
-		}
-	});
-
 	JS.addRule('Identifier', function(left, str){
-		if (left.search(identifierBeginsWith) === 0)
-			return devourToken(left, identifierContinuesWith);
+		if (left.search(identifierBeginsWith) !== 0)
+			return;
+		var tok = devourToken(left, identifierContinuesWith), r = {content: tok};
+		if (isIn(tok, reservedWords))
+			r.type = 'ReservedWord';
+		else if (isIn(tok, keyWords))
+			r.type = 'KeyWord';
+		else if (isIn(tok, futureWords))
+			r.type = 'FutureWord';
+		else
+			return tok;
+		return r;
 	});
 
 	JS.addRule('Hexadecimal', function(left, str){
