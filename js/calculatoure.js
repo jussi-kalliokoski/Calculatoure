@@ -66,7 +66,15 @@
 			}
 		});
 		numpadButtons = Jin(document.getElementById('buttons').getElementsByTagName('button'));
-		numpadButtons.bind('click', function(){ fixData(this); });
+		numpadButtons.bind('click', function(){ fixData(this); })
+		.each(function(){
+			for (var i=0, l=helpData.length; i<l; i++)
+				if (helpData[i].n === this.innerHTML)
+				{
+					this.title = helpData[i].h.replace(/&alpha;/, 'a');
+					return;
+				}
+		});
 		Jin.bind(document.getElementById('calculate'), 'click', function(){
 			calculate(new CodeExpression(formulaBox.value, 'JavaScript'));
 			memHistory.unshift(formulaBox.value);
@@ -74,6 +82,7 @@
 			formulaBox.value = '';
 		});
 		//Jin.bind(document.getElementById('header'), 'click', function(){ info(); });
+		createInfoBox();
 	});
 
 	// Custom functions
@@ -109,20 +118,23 @@
 
 	function info()
 	{
-		/*var inf = document.getElementById('info');
-		if (inf)
+		var inf = document.getElementById('info');
+		if (Jin.hasClass(inf, 'active'))
 		{
 			Jin.removeClass(inf, 'active');
-			setTimeout(function(){ if (inf && inf.parentNode) inf.parentNode.removeChild(inf); }, 2000);
 			return 'Hiding info...';
 		}
+		setTimeout(function(){Jin.addClass(inf, 'active');}, 1);
+		Jin.bind(inf, 'click', function(){ info(); });
+		return 'Showing info...';
+	}
+
+	function createInfoBox()
+	{
 		inf = document.createElement('div');
 		inf.id = 'info';
 		inf.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
 		document.body.appendChild(inf);
-		setTimeout(function(){Jin.addClass(inf, 'active');}, 1);
-		Jin.bind(inf, 'click', function(){ info(); });
-		return 'Showing info...';*/
 	}
 
 	function fixData(button)

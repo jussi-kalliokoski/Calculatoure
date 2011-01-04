@@ -93,7 +93,6 @@ function makeHTML(directory)
 
 function copyImages(directory)
 {
-	shell("cp img/Coalition.ttf " + directory);
 	shell("cp img/favicon.png " + directory);
 	shell("cp img/lines.png " + directory);
 }
