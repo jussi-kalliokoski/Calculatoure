@@ -87,14 +87,15 @@ function compress(directory)
 
 function makeHTML(directory)
 {
-	shell("cd html/ && ls && makejs");
+	shell("cd html/ && ls && makejs " + (globalFlags.isIn("gzip") ? "gzip " : "") + "all");
 	shell("cp temp/index.html " + directory);
 }
 
 function copyImages(directory)
 {
 	shell("cp img/favicon.png " + directory);
-	shell("cp img/lines.png " + directory);
+	shell("cp img/dark.png " + directory);
+	shell("cp img/light.png " + directory);
 }
 
 function debug()

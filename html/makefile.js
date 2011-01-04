@@ -1,4 +1,6 @@
 echo ('Generating HTML files...');
+import('conditional.js');
+var flags = [];
 function all()
 {
 	var html = open('calculatoure.html').split('<!-- BUTTONS -->'),
@@ -19,4 +21,9 @@ function all()
 	}
 	var buttons = out.join('<br />');
 	save('../temp/index.html', html[0] + buttons + html[1]);
+}
+
+function gzip()
+{
+	flags.push('gzip');
 }

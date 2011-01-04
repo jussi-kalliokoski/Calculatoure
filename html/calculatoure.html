@@ -8,22 +8,37 @@
 		<script src="calculatoure.js"></script>
 		<meta name="author" content="Jussi Kalliokoski" />
 		<meta name="charset" content="utf-8" />
-		<meta name="revised" content="2010/12/28" />
+		<meta name="revised" content="2011/01/04" />
 		<meta name="title" content="Calculatoure" />
 		<meta name="description" content="A very slick, versatile and easy to use calculator made with HTML5." />
 		<meta name="keywords" content="HTML5, Scientific, Calculator, Calculatoure, Javascript" />
 	</head>
 	<body>
 		<div id="column">
-			<div><a href="ui:Show Calculator">Calculatoure</a></div>
+			<div id="nav">
+				<a href="ui:Show">Calculatoure</a>
+				<a href="ui:About">About</a>
+				<a href="ui:Help">Help</a>
+				<a href="ui:Share">Share</a>
+			</div>
 			<div id="results"></div>
 			<div>
 				<input id="formula" autofocus="autofocus" /><br />
-				<button id="calculate">Calculate</button>
+				
 			</div>
 			<div id="buttons">
+				<button id="calculate">Calculate</button>
 				<!-- BUTTONS -->
 			</div>
+			<div id="help" class="mini">
+				<h1>Help</h1>
+			</div>
+			<div id="share" class="mini">
+				<h1>Share</h1>
+				<a name="fb_share" type="button_count" href="http://www.facebook.com/sharer.php">Share</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script><br /><br />
+				<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="quinnirill">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			</div>
+			<div id="info" class="mini"></div>
 		</div>
 	</body>
 </html>

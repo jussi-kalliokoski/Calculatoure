@@ -4,8 +4,8 @@
 		acceptAsIs	= ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','==','==='],
 		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','pow','floor','ceil','round','abs','sqrt','max','min','log','exp'],
 		customFunctions	= ['whack', 'frac', 'help', 'info', 'x'],
-		results, gui, formulaBox, guiButtons,
-		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0;
+		nav, results, gui, formulaBox, guiButtons, infoBox, helpBox, shareBox,
+		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0, mini = 'mini';
 
 	createHelp('sin', Math.sin, 'sin(&alpha;) converts an angle value to an x coordinate.');
 	createHelp('cos', Math.cos, 'cos(&alpha;) converts an angle value to an y coordinate.');
@@ -17,15 +17,15 @@
 	createHelp('pow', Math.pow, 'pow(a, b) returns a<sup>b</sup>');
 	createHelp('sqrt', Math.sqrt, 'sqrt(a) returns the square root of a.');
 	createHelp('log', Math.log, 'log(a, b) returns the natural logarithm of a (E-based).');
-	createHelp('sin', Math.exp, 'exp(a) returns the value of E<sup>a</sup>.');
-	createHelp('sin', Math.abs, 'abs(a) returns the absolute value of a.');
-	createHelp('sin', Math.max, 'max(a,b,...) returns the highest value in arguments.');
-	createHelp('sin', Math.min, 'min(a,b,...) returns the lowest value in arguments.');
-	createHelp('sin', Math.floor, 'floor(a) returns a, rounded downwards to the nearest integer.');
-	createHelp('sin', Math.ceil, 'ceil(a) returns a, rounded updwards to the nearest integer.');
-	createHelp('sin', Math.round, 'round(a) returns a, rounded to the nearest integer.');
-	createHelp('sin', frac, 'frac(a) returns the decimal part of a number.');
-	createHelp('sin', whack, 'whack(a) returns all the numbers in a added together and repeated until only one number remains.');
+	createHelp('exp', Math.exp, 'exp(a) returns the value of E<sup>a</sup>.');
+	createHelp('abs', Math.abs, 'abs(a) returns the absolute value of a.');
+	createHelp('max', Math.max, 'max(a,b,...) returns the highest value in arguments.');
+	createHelp('min', Math.min, 'min(a,b,...) returns the lowest value in arguments.');
+	createHelp('floor', Math.floor, 'floor(a) returns a, rounded downwards to the nearest integer.');
+	createHelp('ceil', Math.ceil, 'ceil(a) returns a, rounded updwards to the nearest integer.');
+	createHelp('round', Math.round, 'round(a) returns a, rounded to the nearest integer.');
+	createHelp('frac', frac, 'frac(a) returns the decimal part of a number.');
+	createHelp('whack', whack, 'whack(a) returns all the numbers in a added together and repeated until only one number remains.');
 	whack.toString = function(){return 'function whack() { [native code] }'};
 	frac.toString = function(){return 'function frac() { [native code] }'};
 	help.toString = function(){return 'function help() { [native code] }'};
@@ -33,9 +33,24 @@
 	global.calculate = calculate;
 
 	Jin(function(){
+		nav = document.getElementById('nav');
 		results = document.getElementById('results');
 		gui = document.getElementById('buttons');
 		formulaBox = document.getElementById('formula');
+		helpBox = document.getElementById('help');
+		shareBox = document.getElementById('share');
+		infoBox = document.getElementById('info');
+
+		infoBox.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
+		Jin.bind(infoBox, 'click', function(){ info(); });
+
+		(function(){
+			for (var i=0, l=helpData.length, a=[]; i<l; i++)
+				a.push(helpData[i].h);
+			a.sort();
+			helpBox.innerHTML += a.join('<br />');
+		})();
+
 		Jin.bind(document, 'keydown', function(e){
 			switch(e.which)
 			{
@@ -66,7 +81,7 @@
 			}
 		});
 		numpadButtons = Jin(document.getElementById('buttons').getElementsByTagName('button'));
-		numpadButtons.bind('click', function(){ fixData(this); })
+		numpadButtons.bind('click', function(){ if (this.innerHTML !== 'Calculate') fixData(this); })
 		.each(function(){
 			for (var i=0, l=helpData.length; i<l; i++)
 				if (helpData[i].n === this.innerHTML)
@@ -81,8 +96,26 @@
 			memHistoryPos = -1;
 			formulaBox.value = '';
 		});
-		//Jin.bind(document.getElementById('header'), 'click', function(){ info(); });
-		createInfoBox();
+		Jin(nav.getElementsByTagName('a')).each(function(){
+			var target = this.href.substr(3),
+			doWhat;
+			if (target === 'Show')
+				doWhat = showGui;
+			else if (target === 'About')
+				doWhat = info;
+			else if (target === 'Help')
+				doWhat = toggleHelp;
+			else if (target === 'Share')
+				doWhat = toggleShare;
+
+			Jin.bind(this, 'click', function(e){
+				if(e.preventDefault)
+					e.preventDefault();
+				doWhat();
+			});
+		});
+		addLine('Welcome to Calculatoure!');
+		addLine('Type help(func) for help about a specific function.');
 	});
 
 	// Custom functions
@@ -118,23 +151,43 @@
 
 	function info()
 	{
-		var inf = document.getElementById('info');
-		if (Jin.hasClass(inf, 'active'))
-		{
-			Jin.removeClass(inf, 'active');
-			return 'Hiding info...';
-		}
-		setTimeout(function(){Jin.addClass(inf, 'active');}, 1);
-		Jin.bind(inf, 'click', function(){ info(); });
-		return 'Showing info...';
+		if (Jin.hasClass(infoBox, mini))
+			Jin.addClass(gui, mini);
+		else
+			Jin.removeClass(gui, mini);
+		Jin.toggleClass(infoBox, mini);
+		Jin.addClass(shareBox, mini);
+		Jin.addClass(helpBox, mini);
 	}
 
-	function createInfoBox()
+	function showGui()
 	{
-		inf = document.createElement('div');
-		inf.id = 'info';
-		inf.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
-		document.body.appendChild(inf);
+		Jin.removeClass(gui, mini);
+		Jin.addClass(shareBox, mini);
+		Jin.addClass(helpBox, mini);
+		Jin.addClass(infoBox, mini);
+	}
+
+	function toggleHelp()
+	{
+		if (Jin.hasClass(helpBox, mini))
+			Jin.addClass(gui, mini);
+		else
+			Jin.removeClass(gui, mini);
+		Jin.toggleClass(helpBox, mini);
+		Jin.addClass(shareBox, mini);
+		Jin.addClass(infoBox, mini);
+	}
+
+	function toggleShare()
+	{
+		if (Jin.hasClass(shareBox, mini))
+			Jin.addClass(gui, mini);
+		else
+			Jin.removeClass(gui, mini);
+		Jin.toggleClass(shareBox, mini);
+		Jin.addClass(helpBox, mini);
+		Jin.addClass(infoBox, mini);
 	}
 
 	function fixData(button)

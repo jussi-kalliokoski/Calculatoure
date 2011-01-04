@@ -24,8 +24,8 @@ body, button, input
 	text-shadow: 2px 2px 2px rgba(0,0,0,0.7);
 }
 
-/* inset shadows, 1s transition, color white, borders gray, transparent background, round borders, no margin, bold */
-button, input, #column, #info, a
+/* inset shadows color white, borders gray, transparent background, round borders, no margin, bold */
+button, input, #column, a, #results
 {
 	background-color: transparent;
 	border-color: gray;
@@ -34,17 +34,23 @@ button, input, #column, #info, a
 	margin: 0px;
 	border-radius: 5px;
 	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.7) inset;
-	-webkit-transition: all 1s ease-in-out;
 /*# if(f.common) */
 	box-shadow: 0px 0px 10px rgba(0,0,0,0.7) inset;
 	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.7) inset;
 	-o-box-shadow: 0px 0px 10px rgba(0,0,0,0.7) inset;
-	transition: all 1s ease-in-out;
-	-moz-transition: all 1s ease-in-out;
-	-o-transition: all 1s ease-in-out;
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
 /*# */
+}
+
+/* 1s transition */
+button, input, div, a
+{
+	-webkit-transition: all 1s ease-in-out;
+/*# if(f.common) */
+	transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
 }
 
 /* black, padded, set width, center */
@@ -58,15 +64,22 @@ button, input, #column, #info, a
 }
 
 
-/* Reflect, outer shadow */
-#column, #info, a
+/* Reflect */
+#column
 {
-	-webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
 	-webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255,255,255,0.4)));
 /*# if(f.common) */
 	-moz-box-reflect: below 0px;
 	-o-box-reflect: below 0px;
 	box-reflect: below 0px;
+/*# */
+}
+
+/* Outer shadow */
+#column, #info, a
+{
+	-webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+/*# if(f.common) */
 	box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
 	-moz-box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
 	-o-box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
@@ -117,11 +130,18 @@ button:nth-child(15n+6), button:nth-child(15n+9)
 	font-size: 14px;
 }
 
-/* background lines */
+/* background lines, light */
 
 input
 {
-	background-image: url(lines.png);
+	background-image: url(light.png);
+}
+
+/* background lines, dark */
+
+#results
+{
+	background-image: url(dark.png);
 }
 
 /* full width */
@@ -134,42 +154,70 @@ input
 	text-align: right;
 }
 
-/* Hidden */
+#buttons
+{
+	margin-top: 5px;
+}
+
+#nav
+{
+	text-align: center;
+}
+
+#nav a
+{
+	margin-right: 100px;
+}
+
+#buttons, #share, #info
+{
+	height: 150px;
+}
+
 #info
 {
-	display: none;
-	
+	height: 250px;
 }
 
-/* Cyan background, block */
-#info.active
+#help
 {
-	background-color: rgba(0, 255, 255, 0.3);
-	display: block;
+	height: 250px;
+	overflow: auto;
 }
 
-/* full turn transform, 2s transition */
-#info
+#buttons.mini, #help.mini, #share.mini, #info.mini
 {
-	-webkit-transform: rotate(360deg);
-	-webkit-transition: all 2s ease-in-out;
-/*# if(f.common) */
-	transition: all 2s ease-in-out;
-	-moz-transition: all 2s ease-in-out;
-	-o-transition: all 2s ease-in-out;
-	transform: rotate(360deg);
-	-moz-transform: rotate(360deg);
-	-o-transform: rotate(360deg);
-/*# */
+	height: 0px;
 }
 
-/* reset rotation */
-#info.active
+/* hidden overflow */
+#buttons, #share, #info, #results
 {
-	-webkit-transform: rotate(0deg);
-/*# if(f.common) */
-	transform: rotate(0deg);
-	-moz-transform: rotate(0deg);
-	-o-transform: rotate(0deg);
-/*# */
+	overflow: hidden;
+}
+
+#results
+{
+	height: 200px;
+	border: 1px solid gray;
+	margin-bottom: 10px;
+	padding: 5px;
+}
+
+#results div
+{
+	font-size: 110%;
+}
+
+.error
+{
+	color: darkred;
+}
+.expression
+{
+	color: #6dd;
+}
+.result
+{
+	text-align: right;
 }
