@@ -287,7 +287,7 @@
 		try{
 			var num = prev, x = num, expr = createExpr(mexpr);
 			eval('num='+expr);
-			if (num === '!HELP')
+			if (num === '$')
 				return;
 			prev = num;
 			addLine(writeDown(mexpr), 'expression');
