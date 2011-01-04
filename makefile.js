@@ -78,6 +78,7 @@ function compress(directory)
 	echo ("Compressing...");
 	shell("yui-compressor temp/calculatoure.js -o " + directory + "/calculatoure.js");
 	shell("yui-compressor temp/calculatoure.css -o " + directory + "/calculatoure.css");
+	shell("cp misc/manifest.php " + directory + "/");
 	if (globalFlags.isIn("gzip"))
 	{
 		shell("cd " + directory + "; gzip calculatoure.js -c -f > calculatoure.jgz");
