@@ -3,9 +3,17 @@
 		helpData	= [],
 		acceptAsIs	= ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','==','==='],
 		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','pow','floor','ceil','round','abs','sqrt','max','min','log','exp'],
-		customFunctions	= ['whack', 'frac', 'help', 'info', 'x'],
+		customFunctions	= ['whack', 'frac', 'ans', 'answer', 'help'],
 		nav, results, gui, formulaBox, guiButtons, infoBox, helpBox, shareBox,
-		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0, mini = 'mini';
+		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0, mini = 'mini',
+		globalBindings = {},
+	
+		bind		= Jin.bind,
+		getById		= Jin.byId,
+		getByTag	= Jin.byTag,
+		getByClass	= Jin.byCl;
+
+	assignGlobals();
 
 	createHelp('sin', Math.sin, 'sin(&alpha;) converts an angle value to an x coordinate.');
 	createHelp('cos', Math.cos, 'cos(&alpha;) converts an angle value to an y coordinate.');
@@ -29,20 +37,19 @@
 	whack.toString = function(){return 'function whack() { [native code] }'};
 	frac.toString = function(){return 'function frac() { [native code] }'};
 	help.toString = function(){return 'function help() { [native code] }'};
-	info.toString = function(){info(); return ''};
 	global.calculate = calculate;
 
 	Jin(function(){
-		nav = document.getElementById('nav');
-		results = document.getElementById('results');
-		gui = document.getElementById('buttons');
-		formulaBox = document.getElementById('formula');
-		helpBox = document.getElementById('help');
-		shareBox = document.getElementById('share');
-		infoBox = document.getElementById('info');
+		nav = getById('nav');
+		results = getById('results');
+		gui = getById('buttons');
+		formulaBox = getById('formula');
+		helpBox = getById('help');
+		shareBox = getById('share');
+		infoBox = getById('info');
 
 		infoBox.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
-		Jin.bind(infoBox, 'click', function(){ info(); });
+		bind(infoBox, 'click', function(){ info(); });
 
 		(function(){
 			for (var i=0, l=helpData.length, a=[]; i<l; i++)
@@ -51,7 +58,7 @@
 			helpBox.innerHTML += a.join('<br />');
 		})();
 
-		Jin.bind(document, 'keydown', function(e){
+		bind(document, 'keydown', function(e){
 			switch(e.which)
 			{
 				case 13:
@@ -80,7 +87,7 @@
 					/*# if (f.debug) */console.log(e.which);/*# */
 			}
 		});
-		numpadButtons = Jin(document.getElementById('buttons').getElementsByTagName('button'));
+		numpadButtons = Jin(getById('buttons').getElementsByTagName('button'));
 		numpadButtons.bind('click', function(){ if (this.innerHTML !== 'Calculate') fixData(this); })
 		.each(function(){
 			for (var i=0, l=helpData.length; i<l; i++)
@@ -90,7 +97,7 @@
 					return;
 				}
 		});
-		Jin.bind(document.getElementById('calculate'), 'click', function(){
+		bind(getById('calculate'), 'click', function(){
 			calculate(new CodeExpression(formulaBox.value, 'JavaScript'));
 			memHistory.unshift(formulaBox.value);
 			memHistoryPos = -1;
@@ -244,10 +251,10 @@
 				continue;
 			if (type === 'Number' || type === 'Hexadecimal' || type === 'Octal')
 				expr += content;
-			else if (isIn(content, acceptAsIs) || isIn(content, customFunctions))
+			else if (isIn(content, acceptAsIs))
 				expr += content;
-			else if (isIn(content, mathFunctions))
-				expr += 'Math.'+content;
+			else if (isIn(content, mathFunctions) || isIn(content, customFunctions))
+				expr += 'g["'+content+'"]';
 			else switch(content)
 			{
 				case '=':
@@ -285,8 +292,9 @@
 	function calculate(mexpr)
 	{
 		try{
-			var num = prev, x = num, expr = createExpr(mexpr);
-			eval('num='+expr);
+			var num, expr = createExpr(mexpr), func = new Function('var g = arguments[0]; return ' + expr);
+			globalBindings.ans = globalBindings.answer = prev;
+			num = func(globalBindings);
 			if (num === '$')
 				return;
 			prev = num;
@@ -300,5 +308,26 @@
 /*# */
 			addLine(e, 'error');
 		}
+	}
+
+	function assignGlobals(){
+		var i, l;
+		console.log(globalBindings);
+		for (i = 0, l = mathFunctions.length; i<l; i++){
+try{
+			Object.defineProperty(globalBindings, mathFunctions[i], {
+				get: function(){ return Math[mathFunctions[i]]; }
+			});
+}catch(e){ console.error(globalBindings[mathFunctions[i]]); throw(mathFunctions[i]);  }
+		}
+		Object.defineProperty(globalBindings, 'whack', {
+			get: function(){ return whack; }
+		});
+		Object.defineProperty(globalBindings, 'frac', {
+			get: function(){ return frac; }
+		});
+		Object.defineProperty(globalBindings, 'help', {
+			get: function(){ return help; }
+		});
 	}
 })(this);
