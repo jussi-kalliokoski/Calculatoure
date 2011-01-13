@@ -58,7 +58,7 @@
 		shareBox = getById('share');
 		infoBox = getById('info');
 
-		infoBox.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="http://code.google.com/p/jin-js/" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="http://code.google.com/p/codeexpression-js/" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="http://code.google.com/p/calculatoure/" target="_blank">here</a>. (Also for unobfuscated code)';
+		infoBox.innerHTML = '<h1>About Calculatoure</h1>Version '+version+'<br />Uses <a href="https://github.com/jussi-kalliokoski/jin.js" target="_blank">jin.js</a> (v. '+Jin.version+') and <a href="https://github.com/jussi-kalliokoski/CodeExpression.js" target="_blank">CodeExpression.js</a><br />Type help() for help regarding functions.<br />Calculatoure is open source, as well as the modules it uses. You can see the development <a href="https://github.com/jussi-kalliokoski/Calculatoure" target="_blank">here</a>. (Also for unobfuscated code)';
 		bind(infoBox, 'click', function(){ info(); });
 
 		(function(){
