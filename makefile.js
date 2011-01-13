@@ -6,7 +6,7 @@ Array.prototype.isIn = function(needle)
 	return false;
 }
 
-var version = 0.991,
+var version = 0.992,
 globalFlags = ["compress", "gzip"];
 echo ("Building CALCULATOURE (v. " + version + ")");
 

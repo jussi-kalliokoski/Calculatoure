@@ -1,6 +1,6 @@
 {
   "name": "Calculatoure",
-  "version": "0.991",
+  "version": "0.992",
   "description": "A very slick, versatile and easy to use calculator made with HTML5.",
   "icons": {"128": "icon_128.png" },
   "app": { "urls": ["http://niiden.com/calculatoure/"], "launch": {"web_url": "http://niiden.com/calculatoure/"} }

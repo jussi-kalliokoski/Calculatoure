@@ -121,13 +121,18 @@ button:nth-child(15n+6), button:nth-child(15n+9)
 	margin-left: 5px;
 }
 
-/* right anchor, slightly bigger */
-#calculate
+/* right anchor, bigger font */
+#calculate, #mode
 {
 	float: right;
+	font-size: 14px;
+}
+
+/* slightly bigger */
+#calculate
+{
 	height: 35px;
 	width: 76px;
-	font-size: 14px;
 }
 
 /* background lines, light */
