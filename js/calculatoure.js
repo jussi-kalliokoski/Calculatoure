@@ -2,8 +2,9 @@
 	var	version		= /*# result += version; */,
 		helpData	= [],
 		acceptAsIs	= ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','==','==='],
-		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','pow','floor','ceil','round','abs','sqrt','max','min','log','exp'],
+		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','floor','ceil','round','abs','sqrt','max','min','log','exp'],
 		customFunctions	= ['whack', 'frac', 'ans', 'answer', 'help'],
+		units		= ['deg'],
 		nav, results, gui, formulaBox, guiButtons, infoBox, helpBox, shareBox,
 		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0, mini = 'mini',
 		globalBindings = {},
@@ -255,6 +256,8 @@
 				expr += content;
 			else if (isIn(content, mathFunctions) || isIn(content, customFunctions))
 				expr += 'g["'+content+'"]';
+			else if (isIn(content, units))
+				expr += '*' + 'g["'+content+'"]';
 			else switch(content)
 			{
 				case '=':
@@ -311,14 +314,14 @@
 	}
 
 	function assignGlobals(){
-		var i, l;
-		console.log(globalBindings);
-		for (i = 0, l = mathFunctions.length; i<l; i++){
-try{
-			Object.defineProperty(globalBindings, mathFunctions[i], {
-				get: function(){ return Math[mathFunctions[i]]; }
-			});
-}catch(e){ console.error(globalBindings[mathFunctions[i]]); throw(mathFunctions[i]);  }
+		var i, l = mathFunctions.length;
+		for (i=0; i<l; i++){
+			(function(){
+				var func = Math[mathFunctions[i]];
+				Object.defineProperty(globalBindings, mathFunctions[i], {
+				get: function(){ return func; }
+				});
+			})();
 		}
 		Object.defineProperty(globalBindings, 'whack', {
 			get: function(){ return whack; }
@@ -328,6 +331,9 @@ try{
 		});
 		Object.defineProperty(globalBindings, 'help', {
 			get: function(){ return help; }
+		});
+		Object.defineProperty(globalBindings, 'deg', {
+			get: function(){ return 1 / 180 * Math.PI; }
 		});
 	}
 })(this);
