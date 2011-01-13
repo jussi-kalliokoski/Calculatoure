@@ -4,7 +4,7 @@
 		acceptAsIs	= ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','==','==='],
 		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','floor','ceil','round','abs','sqrt','max','min','log','exp'],
 		customFunctions	= ['whack', 'frac', 'ans', 'answer', 'help'],
-		units		= ['deg'],
+		units		= ['deg', 'turn'],
 		nav, results, gui, formulaBox, guiButtons, infoBox, helpBox, shareBox,
 		helpData = [], memHistory = [], memHistoryPos = -1, prev = 0, mini = 'mini',
 		globalBindings = {},
@@ -261,7 +261,7 @@
 			else switch(content)
 			{
 				case '=':
-					expr += '==';
+					expr += '=';
 					break;
 				case 'pi':
 					expr += 'Math.PI';
@@ -316,24 +316,20 @@
 	function assignGlobals(){
 		var i, l = mathFunctions.length;
 		for (i=0; i<l; i++){
-			(function(){
-				var func = Math[mathFunctions[i]];
-				Object.defineProperty(globalBindings, mathFunctions[i], {
-				get: function(){ return func; }
-				});
-			})();
+			defineGlobal(mathFunctions[i], Math[mathFunctions[i]]);
 		}
-		Object.defineProperty(globalBindings, 'whack', {
-			get: function(){ return whack; }
-		});
-		Object.defineProperty(globalBindings, 'frac', {
-			get: function(){ return frac; }
-		});
-		Object.defineProperty(globalBindings, 'help', {
-			get: function(){ return help; }
-		});
-		Object.defineProperty(globalBindings, 'deg', {
-			get: function(){ return 1 / 180 * Math.PI; }
+		defineGlobal('whack', whack);
+		defineGlobal('frac', frac);
+		defineGlobal('help', help);
+		defineGlobal('deg', 1 / 180 * Math.PI);
+		defineGlobal('turn', 2 * Math.PI);
+	}
+
+	function defineGlobal(name, content){
+		Object.defineProperty(globalBindings, name, {
+			get: function(){
+				return content;
+			}
 		});
 	}
 })(this);
