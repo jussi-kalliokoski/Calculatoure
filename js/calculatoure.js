@@ -24,7 +24,7 @@
 	createHelp('random', 'random', 'random (or rand) is a random number. Use as a constant.');
 	createHelp('pi', 'pi', 'pi is an approximate of the constant pi.');
 	createHelp('e', 'e', 'e is the base of the natural logarithm.');
-	createHelp('base', parseInt, 'parseInt(a,n) converts a from the base of n to default.');
+	createHelp('base', parseInt, 'base(a,n) converts a from the base of n to default.');
 	createHelp('sin', Math.sin, 'sin(&alpha;) converts an angle value to an x coordinate.');
 	createHelp('cos', Math.cos, 'cos(&alpha;) converts an angle value to an y coordinate.');
 	createHelp('tan', Math.tan, 'tan(&alpha;) converts an angle value to a line modifier factor (k).');
