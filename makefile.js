@@ -6,16 +6,17 @@ Array.prototype.isIn = function(needle)
 	return false;
 }
 
-var version = 0.992,
+var version = 0.993,
 globalFlags = ["compress", "gzip"];
 echo ("Building CALCULATOURE (v. " + version + ")");
+shell("mkdir out/common out/mobile out/webkit temp -p");
 
 import("conditional.js");
 
 function all()
 {
 	common();
-//	webkit();
+	webkit();
 //	mobile();
 }
 
@@ -32,11 +33,17 @@ function common()
 function webkit()
 {
 	echo("Making webkit version...\n");
-	var flags = ['webkit'].concat(globalFlags);
+	shell("rm out/webkit/* -f");
+	var flags = ['webkit'].concat(globalFlags),
+	manifest = open("misc/manifest.json");
+	manifest = Conditional.parseJS(manifest, flags)();
+	save("out/webkit/manifest.json", manifest);
 	compile(flags);
-	compress("webkit");
+	compress("webkit", []);
 	makeHTML("webkit");
 	copyImages("webkit");
+	shell("cp img/calculatoure.png out/webkit/icon_128.png");
+	shell("cd out/webkit/; zip calculatoure *");
 }
 
 function mobile()
@@ -71,17 +78,16 @@ function compile(flags)
 	save("temp/calculatoure.css", data);
 }
 
-function compress(directory)
+function compress(directory, flags)
 {
-	if (!globalFlags.isIn("gzip"))
-		return;
+	flags = flags || globalFlags;
 	echo ("Compressing...");
 	shell("yui-compressor temp/calculatoure.js -o out/" + directory + "/calculatoure.js");
 	shell("yui-compressor temp/calculatoure.css -o out/" + directory + "/calculatoure.css");
 	var data = open("out/" + directory + "/calculatoure.js").replace(/evil/g, 'eval');
 	save("out/" + directory + "/calculatoure.js", data);
-	shell("cp misc/manifest.php out/" + directory + "/");
-	if (globalFlags.isIn("gzip"))
+	//shell("cp misc/manifest.php out/" + directory + "/");
+	if (flags.isIn("gzip"))
 	{
 		shell("cd out/" + directory + "; gzip calculatoure.js -c -f > calculatoure.jgz");
 		shell("cp misc/htaccess_for_jgz out/" + directory + "/.htaccess");
