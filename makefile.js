@@ -42,7 +42,7 @@ function webkit()
 	compress("webkit", []);
 	makeHTML("webkit");
 	copyImages("webkit");
-	shell("cp img/calculatoure.png out/webkit/icon_128.png");
+	shell("cp img/calculatoure.png out/webkit/icon_128.png; cp img/favicon.png out/webkit/icon_16.png");
 	shell("cd out/webkit/; zip calculatoure *");
 }
 

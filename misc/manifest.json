@@ -1,8 +1,8 @@
 {
   "name": "Calculatoure",
   "version": "/*# result += version;*/",
-  "description": "A very slick, versatile and easy to use calculator made with HTML5.",
-  "icons": {"128": "icon_128.png" },
+  "description": "A very slick, versatile and easy to use calculator made with HTML5. Works offline.",
+  "icons": {"128": "icon_128.png", "16": "icon_16.png" },
   "app":
 /*# if(f.webkit) */
 { "launch": {"local_path": "index.html"} }
