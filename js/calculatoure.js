@@ -7,7 +7,7 @@
 		units		= ['deg', 'turn'],
 		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
 		modes		= ['Binary', 0, 0, 0, 0, 0, 'Octal', 0, 'Decimal', 0, 0, 0, 0, 0, 'Hexadecimal'],
-		modePrefixes	= {'8': '0', '10': ' ', '16': '0x'},
+		modePrefixes	= {'8': '0', '10': '', '16': '0x'},
 		
 		nav, results, gui, formulaBox, guiButtons, infoBox, helpBox, shareBox, modeSwitch,
 		helpData = [], memHistory = [], prev = [0], memHistoryPos = -1, mini = 'mini',
@@ -48,6 +48,7 @@
 	frac.toString = function(){return 'function frac() { [native code] }'};
 	help.toString = function(){return 'function help() { [native code] }'};
 	global.calculate = calculate;
+	global.calc = function(c, s){ return calculate(new CodeExpression(c, 'JavaScript'), s); };
 
 	Jin(function(){
 		nav = getById('nav');
@@ -303,7 +304,7 @@
 					expr += 'Math.E';
 					break;
 				default:
-					if (type === 'Identifier'){
+					if (type === 'Identifier' || type === 'Word'){
 						expr += 'g["'+content+'"]';
 					} else {
 						throw 'Unexpected ' + type;
@@ -325,7 +326,7 @@
 		return s.join(' ');
 	}
 
-	function calculate(mexpr)
+	function calculate(mexpr, suppress)
 	{
 		try{
 			var num, expr = createExpr(mexpr), func = new Function('var g = arguments[0]; return ""+(' + expr + ')'), ans, result, mode = Number(modeSwitch.value);
@@ -352,21 +353,27 @@
 			prev.unshift(num);
 			if (!isNaN(result)){
 				result = Number(result).toString(mode);
-				if (modePrefixes[mode]){
+				if (modePrefixes[mode] !== undefined){
 					result = modePrefixes[mode] + result;
 				} else {
 					result = 'base(' + result + ', ' + mode + ')';
 				}
 			}
-			addLine(writeDown(mexpr), 'expression');
-			addLine(result, 'result');
+			if (!suppress){
+				addLine(writeDown(mexpr), 'expression');
+				addLine(result, 'result');
+			}
+			return result;
 		}
 		catch(e)
 		{
 /*# if(f.debug) */
 			console.log(expr);
 /*# */
-			addLine(e, 'error');
+			if (!suppress){
+				addLine(e, 'error');
+			}
+			return e;
 		}
 	}
 

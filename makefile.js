@@ -6,8 +6,17 @@ Array.prototype.isIn = function(needle)
 	return false;
 }
 
+Array.prototype.remove = function(needle){
+	for (var i=0; i<this.length; i++){
+		if (this[i] === needle){
+			this.splice(i--, 1);
+		}
+	}
+}
+
 var version = 0.993,
-globalFlags = ["compress", "gzip"];
+globalFlags = ["compress", "gzip"],
+flagsTampered = false;
 echo ("Building CALCULATOURE (v. " + version + ")");
 shell("mkdir out/common out/mobile out/webkit temp -p");
 
@@ -15,6 +24,7 @@ import("conditional.js");
 
 function all()
 {
+	flagsTampered = false;
 	common();
 	webkit();
 //	mobile();
@@ -22,8 +32,10 @@ function all()
 
 function common()
 {
+	flagsTampered = false;
 	echo("Making common version...\n");
 	var flags = ['common'].concat(globalFlags);
+	echo("Using flags " + flags);
 	compile(flags);
 	compress("common");
 	makeHTML("common");
@@ -32,10 +44,12 @@ function common()
 
 function webkit()
 {
+	flagsTampered = false;
 	echo("Making webkit version...\n");
 	shell("rm out/webkit/* -f");
 	var flags = ['webkit'].concat(globalFlags),
 	manifest = open("misc/manifest.json");
+	echo("Using flags " + flags);
 	manifest = Conditional.parseJS(manifest, flags)();
 	save("out/webkit/manifest.json", manifest);
 	compile(flags);
@@ -48,8 +62,10 @@ function webkit()
 
 function mobile()
 {
+	flagsTampered = false
 	echo("Making mobile version...\n");
 	var flags = ['mobile'].concat(globalFlags);
+	echo("Using flags " + flags);
 	compile(flags);
 	compress("mobile");
 	makeHTML("mobile");
@@ -58,6 +74,7 @@ function mobile()
 
 function clean()
 {
+	flagsTampered = false;
 	echo ("Cleaning up...");
 	shell("rm temp/* -f");
 	shell("rm out/common/* -f");
@@ -73,6 +90,9 @@ function compile(flags)
 	var data = open("js/jin.js") +
 		open("deps/codeexpression-js/CodeExpression.min.js") +
 		Conditional.parseJS(open("js/calculatoure.js"), flags)();
+	if (flags.isIn("unitTests")){
+		data += open("js/unit-tests.js");
+	}
 	save("temp/calculatoure.js", data);
 	data = Conditional.parseJS(open("css/calculatoure.css"), flags)();
 	save("temp/calculatoure.css", data);
@@ -109,10 +129,32 @@ function copyImages(directory)
 
 function debug()
 {
+	flagsTampered = true;
 	globalFlags.push('debug');
+}
+
+function noGzip()
+{
+	flagsTampered = true;
+	globalFlags.remove('gzip');
+}
+
+function unitTests()
+{
+	flagsTampered = true;
+	globalFlags.push('unitTests');
+}
+
+function noCompress()
+{
+	flagsTampered = true;
+	globalFlags.remove('compress');
 }
 
 function onfinish()
 {
+	if (flagsTampered){
+		all();
+	}
 	echo("Done!");
 }
