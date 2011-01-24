@@ -14,7 +14,7 @@ Array.prototype.remove = function(needle){
 	}
 }
 
-var version = 0.994,
+var version = 0.995,
 globalFlags = ["compress", "gzip"],
 flagsTampered = false;
 echo ("Building CALCULATOURE (v. " + version + ")");
@@ -87,13 +87,15 @@ function compile(flags)
 {
 	echo ("Compiling...");
 	shell("cd deps/codeexpression-js/;makejs");
-	var data = open("js/jin.js") +
-		open("deps/codeexpression-js/CodeExpression.min.js") +
-		Conditional.parseJS(open("js/calculatoure.js"), flags)();
+	var data = open("deps/codeexpression-js/CodeExpression.min.js") +
+		Conditional.parseJS(open("js/calculatoure.api.js"), flags)();
 	if (flags.isIn("unitTests")){
 		data += open("js/unit-tests.js");
 	}
-	save("temp/calculatoure.js", data);
+	save("temp/calculatoure.api.js", data);
+	data = open("js/jin.js") +
+		Conditional.parseJS(open("js/calculatoure.ui.js"), flags)();
+	save("temp/calculatoure.ui.js", data);
 	data = Conditional.parseJS(open("css/calculatoure.css"), flags)();
 	save("temp/calculatoure.css", data);
 }
@@ -102,14 +104,14 @@ function compress(directory, flags)
 {
 	flags = flags || globalFlags;
 	echo ("Compressing...");
-	shell("yui-compressor temp/calculatoure.js -o out/" + directory + "/calculatoure.js");
+	shell("yui-compressor temp/calculatoure.api.js -o out/" + directory + "/calculatoure.api.js");
+	shell("yui-compressor temp/calculatoure.ui.js -o out/" + directory + "/calculatoure.ui.js");
 	shell("yui-compressor temp/calculatoure.css -o out/" + directory + "/calculatoure.css");
-	var data = open("out/" + directory + "/calculatoure.js").replace(/evil/g, 'eval');
-	save("out/" + directory + "/calculatoure.js", data);
 	//shell("cp misc/manifest.php out/" + directory + "/");
 	if (flags.isIn("gzip"))
 	{
-		shell("cd out/" + directory + "; gzip calculatoure.js -c -f > calculatoure.jgz");
+		shell("cd out/" + directory + "; gzip calculatoure.api.js -c -f > calculatoure.api.jgz");
+		shell("cd out/" + directory + "; gzip calculatoure.ui.js -c -f > calculatoure.ui.jgz");
 		shell("cp misc/htaccess_for_jgz out/" + directory + "/.htaccess");
 	}
 }

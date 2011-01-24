@@ -1,4 +1,4 @@
-(function(calculate){
+(function(calculatoure){
 
 var	tests = [
 		'1 != 2',
@@ -102,26 +102,26 @@ var	tests = [
 
 
 
-Jin(function(){
+(function(){
 	var i, l = tests.length, result, success = 0;
 	console.log('Unit testing results:');
 	for (i=0; i<l; i++){
 		console.log('Test: ' + tests[i]);
 		try{
-			result = calc(tests[i], true);
-			if (result + '' === expecting[i]){
+			result = calculatoure(tests[i]);
+			if (result.data === expecting[i]){
 				success++;
-				console.log('Result: ' + result + ' (as expected)');
+				console.log('Result: ' + result.data + ' (as expected)');
 			} else {
-				console.error('Result: ' + result + ' (expecting ' + expecting[i] + ')');
+				console.error('Result: ' + result.data + ' (expecting ' + expecting[i] + ')');
 			}
-			results.push(result);
+			results.push(result.data);
 		} catch (e){
 			console.error('Result: ' + e);
 			results.push('Error! ' + e + ' (expecting ' + expecting[i] + ')');
 		}
 	}
 	console.log('Testing complete. ' + success + ' / ' + tests.length + ' passed.');
-});
+}());
 
-})(calculate);
+})(calculatoure);
