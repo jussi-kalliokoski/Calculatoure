@@ -14,7 +14,7 @@ Array.prototype.remove = function(needle){
 	}
 }
 
-var version = 0.995,
+var version = 0.996,
 globalFlags = ["compress", "gzip"],
 flagsTampered = false;
 echo ("Building CALCULATOURE (v. " + version + ")");

@@ -9,7 +9,7 @@
 		<script src="calculatoure.ui.js"></script>
 		<meta name="author" content="Jussi Kalliokoski" />
 		<meta name="charset" content="utf-8" />
-		<meta name="revised" content="2011/01/04" />
+		<meta name="revised" content="2011/01/27" />
 		<meta name="title" content="Calculatoure" />
 		<meta name="description" content="A very slick, versatile and easy to use calculator made with HTML5." />
 		<meta name="keywords" content="HTML5, Scientific, Calculator, Calculatoure, Javascript" />
@@ -17,29 +17,50 @@
 	<body>
 		<div id="column">
 			<div id="nav">
-				<a href="ui:Show">Calculatoure</a>
-				<a href="ui:About">About</a>
-				<a href="ui:Help">Help</a>
-				<a href="ui:Share">Share</a>
+				<a href="ui:Show" title="Show Buttons">Calculatoure</a>
+				<a href="ui:About" title="About Calculatoure">About</a>
+				<a href="ui:Help" title="Manual">Help</a>
+				<a href="ui:Share" title="Share the Joy!">Share</a>
 				<select id="mode"></select>
 			</div>
-			<div id="results"></div>
+			<div id="results" title="This is where your results and history come."></div>
 			<div>
-				<input id="formula" autofocus="autofocus" />
+				<input id="formula" autofocus="autofocus" title="This is where you're supposed to type your equations." />
 			</div>
 			<div id="buttons">
-				<button id="calculate">Calculate</button>
+				<button id="calculate" title="Click on this calculate your equation">Calculate</button>
 				<!-- BUTTONS -->
 			</div>
 			<div id="help" class="mini">
 				<h1>Help</h1>
 			</div>
 			<div id="share" class="mini">
-				<h1>Share</h1>
-				<a name="fb_share" type="button_count" href="http://www.facebook.com/sharer.php">Share</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script><br />
-				<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="quinnirill">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+				<h1>Share Your Joy &amp; Help Us!</h1>
+
+				<div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://goo.gl/XyZ4L">
+					<a class="addthis_button_twitter"></a>
+					<a class="addthis_button_facebook"></a>
+					<a class="addthis_button_buzz"></a>
+					<a class="addthis_button_email"></a>
+					<a class="addthis_button_more"></a>
+				</div>
+				<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+				<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=quinnirill"></script>
+
+				<p>
+					<b>What else can I do?</b>
+				</p>
+				<ul>
+					<li>Help in development: <a href="http://github.com/jussi-kalliokoski/Calculatoure" target="_blank">Fork me in GitHub</a></li>
+					<li>Rate, Comment or Suggest a Feature, <a href="http://goo.gl/XyZ4L" target="_blank">tell us what You think!</a></li>
+					<li>Use Calculatoure API on your site! Instructions in <a href="http://github.com/jussi-kalliokoski/Calculatoure" target="_blank">GitHub</a>.</li>
+					<li>Follow me on Twitter: <a href="http://twitter.com/quinnirill" target="_blank">@quinnirill</a>.</li>
+				</ul>
 			</div>
 			<div id="info" class="mini"></div>
+			<a href="http://www.w3.org/html/logo/">
+				<img id="html5logo" src="http://www.w3.org/html/logo/badge/html5-badge-v-css3-graphics-performance-storage.png" width="38" height="202" alt="HTML5 Powered with CSS3 / Styling, Graphics, 3D &amp; Effects, Performance &amp; Integration, and Offline &amp; Storage" title="HTML5 Powered with CSS3 / Styling, Graphics, 3D &amp; Effects, Performance &amp; Integration, and Offline &amp; Storage">
+				</a>
 		</div>
 	</body>
 </html>

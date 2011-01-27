@@ -176,19 +176,18 @@ input
 	margin-right: 100px;
 }
 
-#buttons, #share, #info
+#buttons
 {
 	height: 150px;
 }
 
-#info
+#info, #share, #help
 {
-	height: 250px;
+	height: 300px;
 }
 
 #help
 {
-	height: 250px;
 	overflow: auto;
 }
 
@@ -228,3 +227,24 @@ input
 {
 	text-align: right;
 }
+
+#html5logo /* YEAH */
+{
+	z-index: -1;
+	position: absolute;
+	display: block;
+	right: 0px;
+	top: 0px;
+	border-radius: 5px;
+/*# if (!f.webkit){ */
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+/*# } */
+	background-color: rgba(255,255,255,0.5);
+}
+/*# if (!f.webkit){ */
+#html5logo img
+{
+	border-width: 0px;
+}
+/*# } */
