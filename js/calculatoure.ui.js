@@ -7,8 +7,7 @@
 		getById		= Jin.byId,
 		create		= Jin.create;
 
-	function info()
-	{
+	function info(){
 		if (Jin.hasClass(infoBox, mini)){
 			Jin.addClass(gui, mini);
 		} else {
@@ -19,16 +18,14 @@
 		Jin.addClass(helpBox, mini);
 	}
 
-	function showGui()
-	{
+	function showGui(){
 		Jin.removeClass(gui, mini);
 		Jin.addClass(shareBox, mini);
 		Jin.addClass(helpBox, mini);
 		Jin.addClass(infoBox, mini);
 	}
 
-	function toggleHelp()
-	{
+	function toggleHelp(){
 		if (Jin.hasClass(helpBox, mini)){
 			Jin.addClass(gui, mini);
 		} else {
@@ -39,8 +36,7 @@
 		Jin.addClass(infoBox, mini);
 	}
 
-	function toggleShare()
-	{
+	function toggleShare(){
 		if (Jin.hasClass(shareBox, mini)){
 			Jin.addClass(gui, mini);
 		} else {
@@ -51,8 +47,7 @@
 		Jin.addClass(infoBox, mini);
 	}
 
-	function pushStr(str)
-	{
+	function pushStr(str){
 		var	start	= formulaBox.selectionStart,
 			end	= formulaBox.selectionEnd;
 
@@ -62,8 +57,7 @@
 /*# */
 	}
 
-	function fixData(button)
-	{
+	function fixData(button){
 		var	str	= button.innerHTML
 				.replace(/&lt;/g, '<')
 				.replace(/&gt;/g, '>')
@@ -137,21 +131,26 @@
 		});
 	}
 
+	function calculateHit(){
+		calculate(formulaBox.value);
+		var i;
+		while((i = memHistory.indexOf(formulaBox.value)) !== -1){
+			memHistory.splice(i, 1);
+		}
+		memHistory.unshift(formulaBox.value);
+		memHistoryPos = -1;
+		formulaBox.value = '';
+	}
+
 	function doBindings(){
 		bind(infoBox, 'click', function(){ info(); });
 		bind(document, 'keydown', function(e){
 			switch(e.which)
 			{
 				case 13:
-					calculate(formulaBox.value);
-					if (memHistoryPos !== 0){
-						var i;
-						while((i = memHistory.indexOf(formulaBox.value)) !== -1){
-							memHistory.splice(i, 1);
-						}
-						memHistory.unshift(formulaBox.value);
-					}
-					memHistoryPos = -1;
+					calculateHit();
+					break;
+				case 27:
 					formulaBox.value = '';
 					break;
 				case 38:
@@ -178,12 +177,7 @@
 				fixData(this);
 			}
 		});
-		bind(getById('calculate'), 'click', function(){
-			calculate(formulaBox.value);
-			memHistory.unshift(formulaBox.value);
-			memHistoryPos = -1;
-			formulaBox.value = '';
-		});
+		bind(getById('calculate'), 'click', calculateHit);
 		Jin(nav.getElementsByTagName('a')).each(function(){
 			var target = this.href.substr(3),
 			doWhat;
@@ -206,8 +200,7 @@
 		});
 	}
 
-	function addLine(str, type)
-	{
+	function addLine(str, type){
 		var div = create();
 		div.innerHTML = str;
 		Jin.addClass(div, type);
