@@ -1,11 +1,38 @@
 (function(Jin, calculatoure){
-	var	nav, results, gui, formulaBox, infoBox, helpBox, shareBox, modeSwitch, numpadButtons,
+	var	nav, results, gui, formulaBox, infoBox, helpBox, shareBox, modeSwitch, numpadButtons, refToggle,
 		helpData = calculatoure.help, memHistory = [], memHistoryPos = -1, mini = 'mini',
 		modes		= ['Binary', 0, 0, 0, 0, 0, 'Octal', 0, 'Decimal', 0, 0, 0, 0, 0, 'Hexadecimal'],
 	
 		bind		= Jin.bind,
 		getById		= Jin.byId,
+		appendChildren	= Jin.appendChildren,
+		removeClass	= Jin.removeClass,
+		addClass	= Jin.addClass,
 		create		= Jin.create;
+
+	function touchSetting(setting, value){
+		var storage = window.localStorage;
+		if (storage){
+			if (typeof value !== 'undefined'){
+				storage[setting] = value;
+				return value;
+			} else {
+				return storage[setting];
+			}
+		}
+		return '';
+	}
+
+	function updateReflection(){
+		var	setting	= touchSetting('reflection') !== 'no',
+			body	= document.body;
+		refToggle.checked = setting;
+		if (setting){
+			addClass(body, 'ref');
+		} else {
+			removeClass(body, 'ref');
+		}
+	}
 
 	function info(){
 		if (Jin.hasClass(infoBox, mini)){
@@ -129,6 +156,11 @@
 				}
 			}
 		});
+		var refToggler = create({html: '<br/>'});
+		appendChildren(infoBox, refToggler);
+		refToggle = create('input', {type: 'checkbox', id: 'refToggle'});
+		appendChildren(refToggler, refToggle, create('label', {'for': 'refToggle', html: 'Toggle reflection'}));
+		updateReflection();
 	}
 
 	function calculateHit(){
@@ -143,7 +175,6 @@
 	}
 
 	function doBindings(){
-		bind(infoBox, 'click', function(){ info(); });
 		bind(document, 'keydown', function(e){
 			switch(e.which)
 			{
@@ -197,6 +228,10 @@
 				}
 				doWhat();
 			});
+		});
+		bind(refToggle, 'change', function(){
+			touchSetting('reflection', this.checked ? 'yes' : 'no');
+			updateReflection();
 		});
 	}
 
