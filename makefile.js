@@ -5,7 +5,7 @@ function webapp(){
 }
 
 function extensions(){
-	shell('cd extensions; makejs -v ' + version + ' ' + makejs.rawFlags.join(' '));
+	shell('cd extension; makejs -v ' + version + ' ' + makejs.rawFlags.join(' '));
 }
 
 function api(){
