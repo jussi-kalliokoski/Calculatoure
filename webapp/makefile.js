@@ -1,9 +1,11 @@
 function isIn(needle, haystack)
 {
 	var i, l = haystack.length;
-	for (i=0; i<l; i++)
-		if (haystack[i] === needle)
+	for (i=0; i<l; i++){
+		if (haystack[i] === needle){
 			return true;
+		}
+	}
 	return false;
 }
 
@@ -33,13 +35,14 @@ console.log('Making webapp v. ' + version + ' with flags ' + globalFlags.join(',
 function _compile(flags){
 	console.log('Compiling...');
 	console.log('Checking if API is up to date...');
-	shell('cd ../api/; if [ -s calculatoure.api.js ]; then; echo "Not up to date, making..."; makejs -v ' + version + '; else; echo "Up to date, moving on..."; fi');
+	shell('mkdir temp');
+	shell('cd ../api/; if [ -s calculatoure.api.js ]; then echo "Up to date, moving on..."; else echo "Not up to date, making..."; makejs -v ' + version + '; fi');
 	shell('cp ../api/calculatoure.api.js temp/');
 	console.log('Making UI...');
 	var data	= open('../deps/jin.js/js/jin.js') + 
-			Conditional.parseJS(open('js/calculatoure.ui.js'), flags);
+			Conditional.parseJS(open('js/calculatoure.ui.js')(), flags);
 	save('temp/calculatoure.ui.js', data);
-	data		= Conditional.parseJS(open('js/calculatoure.ui.js'), flags);
+	data		= Conditional.parseJS(open('js/calculatoure.css')(), flags);
 	save('temp/calculatoure.css', data);
 }
 
@@ -101,7 +104,7 @@ function webkit(){
 		
 	manifest		= open('misc/manifest.json');
 
-	manifest		= Conditional.ParseJS(manifest, flags);
+	manifest		= Conditional.parseJS(manifest, flags)();
 	save('out/webkit/manifest.json', manifest);
 	shell('cp ../img/calculatoure.png out/webkit/icon_128.png; cp ../img/favicon.png out/webkit/icon_16.png');
 	shell('cd out/webkit/; zip calculatoure *');
@@ -115,6 +118,10 @@ function all(){
 	common();
 	webkit();
 	mobile();
+}
+
+function clean(){
+	shell('rm out temp -f -p');
 }
 
 function onfinish(){
