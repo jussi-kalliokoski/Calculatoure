@@ -11,6 +11,8 @@ function chrome(){
 	shell('cp ../img/favicon.png out/chrome/icon.png');
 	var data	= Conditional.parseJS(open('misc/manifest.json'), [])();
 	save('out/chrome/manifest.json', data);
+	shell('cd ../api/; if [ -s calculatoure.api.js ]; then echo "Up to date, moving on..."; else echo "Not up to date, making..."; makejs -v ' + version + '; fi');
+	shell('cp ../api/calculatoure.api.js out/chrome/');
 }
 
 function all(){
