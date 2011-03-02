@@ -124,4 +124,4 @@ var	tests = [
 	console.log('Testing complete. ' + success + ' / ' + tests.length + ' passed.');
 }());
 
-})(calculatoure);
+}(require('../calculatoure.api.js').calculatoure));
