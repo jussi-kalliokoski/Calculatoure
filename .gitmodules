@@ -1,0 +1,6 @@
+[submodule "api/deps/CodeExpression.js"]
+	path = api/deps/CodeExpression.js
+	url = git@github.com:jussi-kalliokoski/CodeExpression.js.git
+[submodule "deps/jin.js"]
+	path = deps/jin.js
+	url = git@github.com:jussi-kalliokoski/jin.js.git
