@@ -9,6 +9,8 @@ function chrome(){
 	shell('mkdir out/chrome -p');
 	shell('cp html/popup.html out/chrome/');
 	shell('cp ../img/favicon.png out/chrome/icon.png');
+	shell('cp ../img/dark.png out/chrome/');
+	shell('cp ../img/light.png out/chrome/');
 	var data	= Conditional.parseJS(open('misc/manifest.json'), [])();
 	save('out/chrome/manifest.json', data);
 	shell('cd ../api/; if [ -s calculatoure.api.js ]; then echo "Up to date, moving on..."; else echo "Not up to date, making..."; makejs -v ' + version + '; fi');
