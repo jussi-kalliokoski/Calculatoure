@@ -35,4 +35,8 @@ function test(){
 	shell('node unit-tests/unit-test.js');
 }
 
+function clean(){
+	shell('rm calculatoure.api.js calculatoure.api.min.js .makejs.config -f');
+}
+
 Build.createBuild(all, ['calculatoure.api.js'], ['deps/CodeExpression.js/CodeExpression.full.js', 'js/calculatoure.api.js']);
