@@ -38,15 +38,15 @@ console.log('Making webapp v. ' + version + ' with flags ' + _globalFlags.join('
 
 function _compile(flags){
 	console.log('Compiling...');
-	shell('cd ../api/; makejs -v ' + version);
+	if (_isIn('shims', flags)){
+		shell('cd ../api/; makejs -v ' + version + ' --use-shims');
+	} else {
+		shell('cd ../api/; makejs -v ' + version);
+	}
 	shell('cp ../api/calculatoure.api.js temp/');
 	console.log('Making UI...');
-	var data	= '';
-	if (_isIn('shims', flags)){
-		data += open('js/shims.js');
-	}
-	data	+= open('../deps/jin.js/js/jin.js') + 
-		Conditional.parseJS(open('js/calculatoure.ui.js'), flags)();
+	var data	= open('../deps/jin.js/js/jin.js') + 
+			Conditional.parseJS(open('js/calculatoure.ui.js'), flags)();
 	save('temp/calculatoure.ui.js', data);
 	data		= Conditional.parseJS(open('css/calculatoure.css'), flags)();
 	save('temp/calculatoure.css', data);
