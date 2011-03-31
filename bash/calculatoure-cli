@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+var	calculatoure	= require('calculatoure').calculatoure,
+	flags		= [],
+	argv		= process.argv,
+	version		= /*# result += version; */,
+	calculations,
+	i,l;
+
+function calculate(data){
+	var result = calculatoure(String(data));
+	if (result.original){
+		console.log(result.original);
+	}
+	console.log(result.data);
+}
+
+for (i=2, l=argv.length; i<l; i++){
+	flags.push(argv[i]);
+}
+
+if ((i = flags.indexOf('--help')) !== -1 || (i = flags.indexOf('-h')) !== -1){
+	flags.splice(i, 1);
+	console.log('Usage: calculatoure [calculations] [flags]');
+	console.log('If you leave calculations empty, a console will be opened.');
+	console.log("It's a good idea to put your calculations in quotes.");
+	console.log('Calculations are separated with a semicolon (;)');
+	console.log('Flags:');
+	console.log('\t--h or --help\t Shows this message.');
+} else if (!flags.length){
+	process.stdin.resume();
+	process.stdout.write('calc> ');
+	process.stdin.on('data', function(data){
+		calculate(data);
+		process.stdout.write('calc> ');
+	});
+} else {
+	calculations = flags.join(' ').split(';');
+	for (i=0, l=calculations.length; i<l; i++){
+		calculate(calculations[i]);
+	}
+}

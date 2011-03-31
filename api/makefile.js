@@ -1,6 +1,6 @@
 var	version		= makejs.argumentedFlags['-v'] || makejs.argumentedFlags['--version'] || 0.1,
-	_force		= makejs.flags.indexOf('-f') !== -1 || makejs.flags.indexOf('--force') !== -1,
-	_shims		= makejs.flags.indexOf('--use-shims') !== -1;
+	_force		= makejs.flags.indexOf('-f') !== -1 || makejs.flags.indexOf('--force') !== -1;
+	_shims		= makejs.flags.indexOf('--use-shims') !== -1 && makejs.flags.indexOf('--no-shims') === -1;
 
 import('conditional.js');
 import('build.js');
@@ -34,6 +34,13 @@ function all(){
 	save('calculatoure.api.js', data);
 	shell('yui-compressor calculatoure.api.js -o calculatoure.api.min.js');
 	console.log('Done!');
+}
+
+function commonjs(){
+	all();
+	console.log('Installing commonjs extension...');
+	shell('mkdir ~/.node_modules/calculatoure/ -p');
+	shell('cp calculatoure.api.js ~/.node_modules/calculatoure/index.js');
 }
 
 function test(){
