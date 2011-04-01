@@ -25,14 +25,20 @@ for (i=2, l=argv.length; i<l; i++){
 	flags.push(argv[i]);
 }
 
-if ((i = flags.indexOf('--help')) !== -1 || (i = flags.indexOf('-h')) !== -1){
+if ((i = flags.indexOf('--no-colors')) !== -1){
+	flags.splice(i, 1);
+	red = blue = green = none;
+}
+
+if ((i = flags.indexOf('--help')) !== -1){
 	flags.splice(i, 1);
 	console.log('Usage: calculatoure [calculations] [flags]');
 	console.log('If you leave calculations empty, a console will be opened.');
 	console.log("It's a good idea to put your calculations in quotes.");
 	console.log('Calculations are separated with a semicolon (;)');
 	console.log('Flags:');
-	console.log('\t--h or --help\t Shows this message.');
+	console.log('\t--help\t Shows this message.');
+	console.log('\t--no-colors\tDisables colours.');
 } else if (!flags.length){
 	process.stdin.resume();
 	process.stdout.write('calc> ');
