@@ -10,9 +10,11 @@ var	calculatoure	= require('calculatoure').calculatoure,
 function calculate(data){
 	var result = calculatoure(String(data));
 	if (result.original){
-		console.log(result.original);
+		console.log("\033[34m" + result.original + "\033[m");
+		console.log("\033[32m" + result.data + "\033[m");
+	} else {
+		console.log("\033[31m" + result.data + "\033[m");
 	}
-	console.log(result.data);
 }
 
 for (i=2, l=argv.length; i<l; i++){
