@@ -27,7 +27,7 @@ for (i=2, l=argv.length; i<l; i++){
 
 if ((i = flags.indexOf('--no-colors')) !== -1){
 	flags.splice(i, 1);
-	red = blue = green = none;
+	red = blue = green = nocolors;
 }
 
 if ((i = flags.indexOf('--help')) !== -1){
