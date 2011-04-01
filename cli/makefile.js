@@ -1,4 +1,4 @@
-console.log('Making bash executable...');
+console.log('Making CLI...');
 
 import('conditional.js');
 
