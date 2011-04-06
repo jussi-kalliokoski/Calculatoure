@@ -217,6 +217,15 @@
 	}
 
 	function calculatoure(c, m){
+		c	= c.replace(/[\[\{]/g, '(').replace(/[\]\}]/g, ')');
+		var	open	= 0,
+			closed	= 0;
+		c.replace(/[\(\)]/g, function(a){
+			a === '(' ? open++ : closed++;
+		});
+		while (open-- > closed){
+			c += ')';
+		}
 		return calculate( new CodeExpression(c, 'JavaScript'), m );
 	}
 
