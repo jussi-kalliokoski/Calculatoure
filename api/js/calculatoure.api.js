@@ -24,7 +24,8 @@
 		Object.defineProperty(globalBindings, name, {
 			get: function(){
 				return content;
-			}
+			},
+			enumerable: true
 		});
 	}
 
@@ -84,10 +85,11 @@
 			word = word[0];
 			for (key in globalBindings){
 				if (globalBindings.hasOwnProperty(key) && key.substr(0, word.length) === word){
-					results.push( key + (typeof globalBindings === 'function' ? '(' : '') );
+					results.push( key + (typeof globalBindings[key] === 'function' ? '(' : '') );
 				}
 			}
 		}
+		return results;
 	}
 
 	function createHelp(name, func, help){

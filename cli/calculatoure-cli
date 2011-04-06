@@ -8,6 +8,7 @@ var	calculatoure	= require('calculatoure').calculatoure,
 	green		= "\033[32m",
 	blue		= "\033[34m",
 	nocolor		= "\033[m",
+	RLI,
 	calculations,
 	i,l;
 
@@ -40,12 +41,16 @@ if ((i = flags.indexOf('--help')) !== -1){
 	console.log('\t--help\t Shows this message.');
 	console.log('\t--no-colors\tDisables colours.');
 } else if (!flags.length){
-	process.stdin.resume();
-	process.stdout.write('calc> ');
-	process.stdin.on('data', function(data){
-		calculate(data);
-		process.stdout.write('calc> ');
+	RLI = require('readline').createInterface(process.stdin, process.stdout, function(data){
+		return [calculatoure.autoComplete(data) || [], data];
 	});
+	RLI.setPrompt('calc# ');
+	function promptLoop(data){
+		calculate(data);
+		RLI.prompt();
+	}
+	RLI.on('line', promptLoop);
+	RLI.prompt();
 } else {
 	calculations = flags.join(' ').split(';');
 	for (i=0, l=calculations.length; i<l; i++){
