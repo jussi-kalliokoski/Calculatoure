@@ -234,7 +234,6 @@
 				c += parensClosers[i];
 			}
 		}
-		console.log(c);
 		return calculate( new CodeExpression(c, 'JavaScript'), m );
 	}
 
