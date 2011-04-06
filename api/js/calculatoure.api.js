@@ -9,7 +9,7 @@
 		identifierTypes	= ['Identifier', 'Word'],
 		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
 		modePrefixes	= {'8': '0', '10': '', '16': '0x'},
-		parensOpMatch	= /[\x7b\x7d\5b\5d]/g,
+		parensOpMatch	= /[\x7b\x7d\x5b\x5d]/g,
 		parensOpeners	= ['[', '{'],
 		parensClosers	= [']', '}'],
 		parensOperators	= parensOpeners.concat(parensClosers);
