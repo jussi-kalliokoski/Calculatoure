@@ -10,6 +10,29 @@
 		addClass	= Jin.addClass,
 		create		= Jin.create;
 
+	function inCommon(arr){
+		var	result	= '',
+			i	= 0,
+			l	= arr.length,
+			match	= true,
+			ref,
+			n;
+		while(match){
+			ref = arr[0][i];
+			for (n=1; n<l; n++){
+				if (arr[n][i] !== ref){
+					match = false;
+					break;
+				}
+			}
+			if (match){
+				result += ref;
+			}
+			i++;
+		}
+		return result;
+	}
+
 	function touchSetting(setting, value){
 		var storage = window.localStorage;
 		if (storage){
@@ -176,8 +199,18 @@
 
 	function doBindings(){
 		bind(document, 'keydown', function(e){
-			switch(e.which)
-			{
+			var corrections, i, l;
+			switch(e.which){
+				case 9:
+					corrections	= calculatoure.autoComplete(formulaBox.value);
+					l		= corrections.length;
+					if (l === 1){
+						formulaBox.value = corrections[0];
+					} else if(l > 1) {
+						addLine('Options: ' + corrections.join(', '), 'result');
+						formulaBox.value = inCommon(corrections);
+					}
+					break;
 				case 13:
 					calculateHit();
 					break;
@@ -201,7 +234,9 @@
 					break;
 				default:
 					/*# if (f.debug) */console.log(e.which);/*# */
+					return;
 			}
+			e && e.preventDefault && e.preventDefault();
 		});
 		numpadButtons.bind('click', function(){
 			if (this.innerHTML !== 'Calculate'){
