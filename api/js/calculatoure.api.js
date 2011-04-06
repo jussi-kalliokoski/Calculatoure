@@ -8,7 +8,11 @@
 		mathConsts	= ['e', 'pi', 'sqrt2', 'sqrt1_2', 'ln2', 'ln10', 'log2e', 'log10e'],
 		identifierTypes	= ['Identifier', 'Word'],
 		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
-		modePrefixes	= {'8': '0', '10': '', '16': '0x'};
+		modePrefixes	= {'8': '0', '10': '', '16': '0x'},
+		parensOpMatch	= /[\x7b\x7d\5b\5d]/g,
+		parensOpeners	= ['[', '{'],
+		parensClosers	= [']', '}'],
+		parensOperators	= parensOpeners.concat(parensClosers);
 
 	function isIn(needle, haystack){
 		var i, l = haystack.length;
@@ -152,6 +156,8 @@
 				expr += content;
 			} else if (type === 'Identifier' || type === 'Word'){
 				expr += 'g["'+content+'"]';
+			} else if (type === 'Operator' && isIn(content, parensOperators)) {
+				expr += isIn(content, parensOpeners) ? '(' : ')';
 			} else {
 				throw 'Unexpected ' + type;
 			}
@@ -217,15 +223,18 @@
 	}
 
 	function calculatoure(c, m){
-		c	= c.replace(/[\[\{]/g, '(').replace(/[\]\}]/g, ')');
-		var	open	= 0,
-			closed	= 0;
-		c.replace(/[\(\)]/g, function(a){
-			a === '(' ? open++ : closed++;
+		var	open	= [0, 0],
+			closed	= [0, 0],
+			i;
+		c.replace(parensOpMatch, function(a){
+			isIn(a, parensOpeners) ? open[parensOpeners.indexOf(a)]++ : closed[parensClosers.indexOf(a)]++;
 		});
-		while (open-- > closed){
-			c += ')';
+		for (i=0; i<2; i++){
+			while (open[i]-- > closed[i]){
+				c += parensClosers[i];
+			}
 		}
+		console.log(c);
 		return calculate( new CodeExpression(c, 'JavaScript'), m );
 	}
 
