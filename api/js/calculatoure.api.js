@@ -80,12 +80,16 @@
 	function autoComplete(data){
 		var	results = [],
 			word	= /[a-z]+$/i.exec(data),
+			l,
+			prefix,
 			key;
 		if (word){
-			word = word[0];
+			word	= word[0];
+			l	= word.length;
+			prefix	= data.substr(0, data.length - l);
 			for (key in globalBindings){
-				if (globalBindings.hasOwnProperty(key) && key.substr(0, word.length) === word){
-					results.push( key + (typeof globalBindings[key] === 'function' ? '(' : '') );
+				if (globalBindings.hasOwnProperty(key) && key.substr(0, l) === word){
+					results.push( prefix + key + (typeof globalBindings[key] === 'function' ? '(' : '') );
 				}
 			}
 		}
