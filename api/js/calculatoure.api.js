@@ -10,8 +10,7 @@
 		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
 		modePrefixes	= {'8': '0', '10': '', '16': '0x'};
 
-	function isIn(needle, haystack)
-	{
+	function isIn(needle, haystack){
 		var i, l = haystack.length;
 		for (i=0; i<l; i++){
 			if (haystack[i] === needle){
@@ -51,18 +50,15 @@
 
 	// Custom functions
 
-	function whack(num)
-	{
+	function whack(num){
 		return (num-1) % 9 + 1;
 	}
 
-	function frac(num)
-	{
+	function frac(num){
 		return num - Math.floor(num);
 	}
 
-	function help(about)
-	{
+	function help(about){
 		var i;
 		for (i=0; i<helpData.length; i++){
 			if (helpData[i].f === about){
@@ -80,9 +76,21 @@
 		return Math.random(b);
 	}
 
+	function autoComplete(data){
+		var	results = [],
+			word	= /[a-z]+$/i.exec(data),
+			key;
+		if (word){
+			word = word[0];
+			for (key in globalBindings){
+				if (globalBindings.hasOwnProperty(key) && key.substr(0, word.length) === word){
+					results.push( key + (typeof globalBindings === 'function' ? '(' : '') );
+				}
+			}
+		}
+	}
 
-	function createHelp(name, func, help)
-	{
+	function createHelp(name, func, help){
 		helpData.push({n: name, f: func, h: help});
 	}
 
@@ -119,8 +127,7 @@
 		rand.toString = function(){ return rand(); };
 	}
 
-	function createExpr(mexpr)
-	{
+	function createExpr(mexpr){
 		var i, expr = '', content, type, prevtype;
 		for(i=0; i < mexpr.length; i++){
 			if (mexpr[i].type === 'Whitespace'){
@@ -146,8 +153,7 @@
 		return expr;
 	}
 
-	function writeDown(mexpr)
-	{
+	function writeDown(mexpr){
 		var i, s = [];
 		for(i=0; i<mexpr.length; i++){
 			if (mexpr[i].content.toLowerCase() === 'pi'){
@@ -172,8 +178,7 @@
 		};
 	}
 
-	function calculate(mexpr, mode)
-	{
+	function calculate(mexpr, mode){
 		try{
 			var	expr	= createExpr(mexpr),
 				func	= new Function( 'var g = arguments[0]; return ""+(' + expr + ')' ),
@@ -212,9 +217,10 @@
 	assignGlobals();
 	generateHelps();
 
-	global.calculatoure = calculatoure;
-	calculatoure.calculate = calculatoure;
-	calculatoure.help = helpData;
-	calculatoure.version = version;
+	global.calculatoure		= calculatoure;
+	calculatoure.calculate		= calculatoure;
+	calculatoure.help		= helpData;
+	calculatoure.version		= version;
+	calculatoure.autoComplete	= autoComplete;
 
 }(CodeExpression, this));
