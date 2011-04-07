@@ -9,9 +9,9 @@
 		identifierTypes	= ['Identifier', 'Word'],
 		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
 		modePrefixes	= {'8': '0', '10': '', '16': '0x'},
-		parensOpMatch	= /[\x7b\x7d\x5b\x5d]/g,
-		parensOpeners	= ['[', '{'],
-		parensClosers	= [']', '}'],
+		parensOpMatch	= /[\x7b\x7d\x5b\x5d\x28\x29]/g,
+		parensOpeners	= ['[', '{', '('],
+		parensClosers	= [']', '}', ')'],
 		parensOperators	= parensOpeners.concat(parensClosers);
 
 	function isIn(needle, haystack){
@@ -223,13 +223,13 @@
 	}
 
 	function calculatoure(c, m){
-		var	open	= [0, 0],
-			closed	= [0, 0],
+		var	open	= [0, 0, 0],
+			closed	= [0, 0, 0],
 			i;
 		c.replace(parensOpMatch, function(a){
 			isIn(a, parensOpeners) ? open[parensOpeners.indexOf(a)]++ : closed[parensClosers.indexOf(a)]++;
 		});
-		for (i=0; i<2; i++){
+		for (i=0; i<3; i++){
 			while (open[i]-- > closed[i]){
 				c += parensClosers[i];
 			}
