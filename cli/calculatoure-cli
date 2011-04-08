@@ -9,6 +9,7 @@ var	calculatoure	= require('calculatoure').calculatoure,
 	blue		= "\033[34m",
 	nocolor		= "\033[m",
 	exiting		= false,
+	defining	= null,
 	output		= '',
 	fs		= require('fs'),
 	mode		= 10,
@@ -100,10 +101,33 @@ if ((i = flags.indexOf('--help')) !== -1){
 	});
 	RLI.setPrompt('calc# ');
 	function promptLoop(data){
-		saveOutput('calc# ' + data + '\n');
-		calculate(data);
-		if (!exiting){
+		if (defining){
+			try{
+				var fn = new Function('var a = arguments[0]; return ' + data);
+				calculatoure.addFunction(defining, fn);
+				saveOutput(defining + '(a){\n\treturn ' + data + '\n}\n');
+			} catch(e){
+				console.log('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}');
+				saveOutput('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}\n');
+			}
+			defining = null;
+			RLI.setPrompt('calc# ');
 			RLI.prompt();
+			return;
+		}
+		var defineArgument = /^define ([\$a-z_][\$a-z_0-9]*)$/i.exec(data);
+		
+		if (defineArgument){
+			defining = defineArgument[1];
+			console.log('Define function using JavaScript syntax:');
+			RLI.setPrompt('function ' + defining + ' (a): return ');
+			RLI.prompt();
+		} else {
+			saveOutput('calc# ' + data + '\n');
+			calculate(data);
+			if (!exiting){
+				RLI.prompt();
+			}
 		}
 	}
 	RLI.on('line', promptLoop);
