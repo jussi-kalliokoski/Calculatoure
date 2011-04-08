@@ -104,6 +104,11 @@
 		helpData.push({n: name, f: func, h: help});
 	}
 
+	function addFunction(name, func, help){
+		defineGlobal(name, func);
+		help && createHelp(name, func, help);
+	}
+
 	function generateHelps(){
 		createHelp('ans', ans, 'ans(n) returns the n:th answer and ans returns ans(0).');
 		createHelp('random', rand, 'random (or rand) is a random number. Use as a constant.');
@@ -245,5 +250,6 @@
 	calculatoure.help		= helpData;
 	calculatoure.version		= version;
 	calculatoure.autoComplete	= autoComplete;
+	calculatoure.addFunction	= addFunction;
 
 }(CodeExpression, this));
