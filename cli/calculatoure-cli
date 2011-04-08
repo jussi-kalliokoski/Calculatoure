@@ -9,6 +9,9 @@ var	calculatoure	= require('calculatoure').calculatoure,
 	blue		= "\033[34m",
 	nocolor		= "\033[m",
 	exiting		= false,
+	output		= '',
+	fs		= require('fs'),
+	fileStream,
 	RLI,
 	calculations,
 	i,l;
@@ -18,8 +21,18 @@ function calculate(data){
 	if (result.original){
 		console.log(blue + result.original + nocolor);
 		console.log(green + result.data + nocolor);
+		saveOutput(result.original + '\n');
+		saveOutput(result.data + '\n');
 	} else {
 		console.log(red + result.data + nocolor);
+		saveOutput(result.data + '\n');
+	}
+}
+
+function saveOutput(data){
+	output += data;
+	if (fileStream){
+		fileStream.write(data);
 	}
 }
 
@@ -42,6 +55,19 @@ if ((i = flags.indexOf('--no-colors')) !== -1){
 	red = blue = green = nocolor;
 }
 
+if ((i = flags.indexOf('--output-to-file')) !== -1){
+	flags.splice(i, 1);
+	try{
+		fileStream = fs.createWriteStream(flags[i], {
+			encoding: 'UTF-8'
+		});
+		flags.splice(i, 1);
+	} catch(e){
+		console.log('Failed to open stream to write to file: ' + flags[i]);
+		process.exit(256);
+	}
+}
+
 if ((i = flags.indexOf('--help')) !== -1){
 	flags.splice(i, 1);
 	console.log('Usage: calculatoure [calculations] [flags]');
@@ -49,14 +75,16 @@ if ((i = flags.indexOf('--help')) !== -1){
 	console.log("It's a good idea to put your calculations in quotes.");
 	console.log('Calculations are separated with a semicolon (;)');
 	console.log('Flags:');
-	console.log('\t--help\t Shows this message.');
-	console.log('\t--no-colors\tDisables colours.');
+	console.log('\t--help\t\t\t\tShows this message.');
+	console.log('\t--no-colors\t\t\tDisables colours.');
+	console.log('\t--output-to-file <filename>\tWrites output to the filename specified.');
 } else if (!flags.length){
 	RLI = require('readline').createInterface(process.stdin, process.stdout, function(data){
 		return [calculatoure.autoComplete(data) || [], data];
 	});
 	RLI.setPrompt('calc# ');
 	function promptLoop(data){
+		saveOutput('calc# ' + data + '\n');
 		calculate(data);
 		if (!exiting){
 			RLI.prompt();
