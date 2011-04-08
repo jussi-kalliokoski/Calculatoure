@@ -1,6 +1,7 @@
 (function(Jin, calculatoure){
 	var	nav, results, gui, formulaBox, infoBox, helpBox, shareBox, modeSwitch, numpadButtons, refToggle,
 		helpData = calculatoure.help, memHistory = [], memHistoryPos = -1, mini = 'mini',
+		views,
 		modes		= ['Binary', 0, 0, 0, 0, 0, 'Octal', 0, 'Decimal', 0, 0, 0, 0, 0, 'Hexadecimal'],
 	
 		bind		= Jin.bind,
@@ -199,7 +200,8 @@
 
 	function doBindings(){
 		bind(document, 'keydown', function(e){
-			var corrections, i, l;
+			var	shift	= e.shiftKey,
+				corrections, i, l;
 			switch(e.which){
 				case 9:
 					corrections	= calculatoure.autoComplete(formulaBox.value);
@@ -217,11 +219,23 @@
 				case 27:
 					formulaBox.value = '';
 					break;
+				case 37:
+					if (!shift){
+						return;
+					}
+					views.move(-1);
+					break;
 				case 38:
 					if (memHistoryPos >= memHistory.length - 1){
 						return;
 					}
 					formulaBox.value = memHistory[++memHistoryPos];
+					break;
+				case 39:
+					if (!shift){
+						return;
+					}
+					views.move(1);
 					break;
 				case 40:
 					memHistoryPos--;
@@ -245,7 +259,7 @@
 		});
 		bind(getById('calculate'), 'click', calculateHit);
 		Jin(nav.getElementsByTagName('a')).each(function(){
-			var target = this.href.substr(3),
+			var target = this.getAttribute('href').substr(3),
 			doWhat;
 			if (target === 'Show'){
 				doWhat = showGui;
@@ -279,6 +293,13 @@
 	}
 
 	Jin(function(){
+		views = [showGui, info, toggleHelp, toggleShare];
+		views.index = 0;
+		views.move = function(amount){
+			var	self	= this,
+				l	= self.length;
+			self[self.index = (self.index + amount + l) % l]();
+		};
 		assignElements();
 		fillDynamicElements();
 		doBindings();
