@@ -107,8 +107,8 @@ if ((i = flags.indexOf('--help')) !== -1){
 				calculatoure.addFunction(defining, fn);
 				saveOutput(defining + '(a){\n\treturn ' + data + '\n}\n');
 			} catch(e){
-				console.log('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}');
-				saveOutput('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}\n');
+				console.log('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}\n' + e);
+				saveOutput('Failed to define function ' + defining + '(a){\n\treturn ' + data + '\n}\n' + e + '\n');
 			}
 			defining = null;
 			RLI.setPrompt('calc# ');
