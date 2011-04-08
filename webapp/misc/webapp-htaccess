@@ -11,5 +11,5 @@ RewriteCond %{HTTP_USER_AGENT}".*Safari.*" [OR]
 RewriteCond %{HTTP:AcceptEncoding} !gzip
 RewriteRule (.*)\.cgz$ $1\.css [L]
 
-AddType "text/stylesheet;charset=UTF-8" .cgz
+AddType "text/css;charset=UTF-8" .cgz
 AddEncoding gzip .cgz
