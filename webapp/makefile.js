@@ -82,6 +82,9 @@ function _copyImages(name, flags){
 	shell('cp ../img/favicon.png out/' + name);
 	shell('cp ../img/dark.png out/' + name);
 	shell('cp ../img/light.png out/' + name);
+	if (name !== 'webkit'){
+		shell('cp ../img/gradient.png out/');
+	}
 }
 
 function _start(name, flags){
