@@ -11,13 +11,14 @@ var	calculatoure	= require('calculatoure').calculatoure,
 	exiting		= false,
 	output		= '',
 	fs		= require('fs'),
+	mode		= 10,
 	fileStream,
 	RLI,
 	calculations,
 	i,l;
 
 function calculate(data){
-	var result = calculatoure(String(data));
+	var result = calculatoure(String(data), mode);
 	if (result.original){
 		console.log(blue + result.original + nocolor);
 		console.log(green + result.data + nocolor);
@@ -34,6 +35,7 @@ function saveOutput(data){
 	if (fileStream){
 		fileStream.write(data);
 	}
+	return data;
 }
 
 function exitCLI(){
@@ -42,9 +44,23 @@ function exitCLI(){
 	return 'Exiting...';
 }
 
+function chMode(m){
+	m = Math.floor(Number(m));
+	if (m > 1 && m < 17){
+		mode = m;
+		console.log('Set mode to ' + m + '.');
+		saveOutput('Set mode to ' + m + '.\n');
+	} else {
+		console.log('Invalid mode (' + m + ').');
+		saveOutput('Invalid mode ' + m + '().\n');
+	}
+	return m;
+}
+
 exitCLI.toString = exitCLI;
 
 calculatoure.addFunction('exit', exitCLI);
+calculatoure.addFunction('mode', chMode, 'mode(num) Changes output mode to base of num where 2 <= num <= 16.');
 
 for (i=2, l=argv.length; i<l; i++){
 	flags.push(argv[i]);
