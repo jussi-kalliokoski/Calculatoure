@@ -1,4 +1,4 @@
-var version = 0.999;
+var version = 0.9991;
 
 function webapp(){
 	shell('cd webapp; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));

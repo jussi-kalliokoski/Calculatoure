@@ -17,6 +17,10 @@ And then you can use "calculatoure" in the bash to start the application. ctrl+c
 
 Changelog:
 
+2011/04/08: v.0.9991 (1RC2)
+ * Some final patching up.
+ * More keyboard shortcuts (try shift + directional buttons).
+
 2011/04/07: v.0.999
  * Auto-Completion via TAB button.
  * Automatic parens closing feature.
