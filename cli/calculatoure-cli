@@ -8,6 +8,7 @@ var	calculatoure	= require('calculatoure').calculatoure,
 	green		= "\033[32m",
 	blue		= "\033[34m",
 	nocolor		= "\033[m",
+	exiting		= false,
 	RLI,
 	calculations,
 	i,l;
@@ -21,6 +22,16 @@ function calculate(data){
 		console.log(red + result.data + nocolor);
 	}
 }
+
+function exitCLI(){
+	process.stdin.pause();
+	exiting = true;
+	return 'Exiting...';
+}
+
+exitCLI.toString = exitCLI;
+
+calculatoure.addFunction('exit', exitCLI);
 
 for (i=2, l=argv.length; i<l; i++){
 	flags.push(argv[i]);
@@ -47,7 +58,9 @@ if ((i = flags.indexOf('--help')) !== -1){
 	RLI.setPrompt('calc# ');
 	function promptLoop(data){
 		calculate(data);
-		RLI.prompt();
+		if (!exiting){
+			RLI.prompt();
+		}
 	}
 	RLI.on('line', promptLoop);
 	RLI.prompt();
