@@ -1,0 +1,15 @@
+RewriteEngine on
+RewriteCond %{HTTP_USER_AGENT}".*Safari.*" [OR]
+RewriteCond %{HTTP:AcceptEncoding} !gzip
+RewriteRule (.*)\.jgz$ $1\.js [L]
+
+AddType "text/javascript;charset=UTF-8" .jgz
+AddEncoding gzip .jgz
+
+RewriteEngine on
+RewriteCond %{HTTP_USER_AGENT}".*Safari.*" [OR]
+RewriteCond %{HTTP:AcceptEncoding} !gzip
+RewriteRule (.*)\.cgz$ $1\.css [L]
+
+AddType "text/stylesheet;charset=UTF-8" .cgz
+AddEncoding gzip .cgz

@@ -63,7 +63,7 @@ function _compress(name, flags){
 			shell('cd out/' + name + '/; gzip calculatoure.api.js -c -f > calculatoure.api.jgz');
 			shell('cd out/' + name + '/; gzip calculatoure.ui.js -c -f > calculatoure.ui.jgz');
 			shell('cd out/' + name + '/; gzip calculatoure.css -c -f > calculatoure.cgz');
-			shell('cp misc/htaccess_for_jgz out/' + name + '/.htaccess');
+			shell('cp misc/webapp-htaccess out/' + name + '/.htaccess');
 		}
 	} else {
 		shell('cp temp/* out/' + name + '/');
