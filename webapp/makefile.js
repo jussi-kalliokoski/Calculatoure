@@ -83,7 +83,7 @@ function _copyImages(name, flags){
 	shell('cp ../img/dark.png out/' + name);
 	shell('cp ../img/light.png out/' + name);
 	if (name !== 'webkit'){
-		shell('cp ../img/gradient.png out/');
+		shell('cp ../img/gradient.png out/' + name);
 	}
 }
 
