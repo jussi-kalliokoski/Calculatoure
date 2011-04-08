@@ -226,10 +226,14 @@
 					views.move(-1);
 					break;
 				case 38:
-					if (memHistoryPos >= memHistory.length - 1){
-						return;
+					if (shift){
+						chMode(-1);
+					} else {
+						if (memHistoryPos >= memHistory.length - 1){
+							return;
+						}
+						formulaBox.value = memHistory[++memHistoryPos];
 					}
-					formulaBox.value = memHistory[++memHistoryPos];
 					break;
 				case 39:
 					if (!shift){
@@ -238,12 +242,16 @@
 					views.move(1);
 					break;
 				case 40:
-					memHistoryPos--;
-					if (memHistoryPos < 0){
-						memHistoryPos = -1;
-						formulaBox.value = '';
+					if (shift){
+						chMode(1);
 					} else {
-						formulaBox.value = memHistory[memHistoryPos];
+						memHistoryPos--;
+						if (memHistoryPos < 0){
+							memHistoryPos = -1;
+							formulaBox.value = '';
+						} else {
+							formulaBox.value = memHistory[memHistoryPos];
+						}
 					}
 					break;
 				default:
@@ -290,6 +298,11 @@
 		Jin.addClass(div, type);
 		results.appendChild(div);
 		results.scrollTop = results.scrollHeight;
+	}
+
+	function chMode(amount){
+		var	l	= modeSwitch.length;
+		modeSwitch.selectedIndex = (modeSwitch.selectedIndex + amount + l) % l;
 	}
 
 	Jin(function(){
