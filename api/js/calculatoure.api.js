@@ -83,7 +83,7 @@
 
 	function autoComplete(data){
 		var	results = [],
-			word	= /[a-z]+$/i.exec(data),
+			word	= /[\$_a-z][\$_a-z0-9]*$/i.exec(data),
 			l,
 			prefix,
 			key;
