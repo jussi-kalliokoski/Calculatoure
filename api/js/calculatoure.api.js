@@ -148,9 +148,9 @@
 			if (mexpr[i].type === 'Whitespace'){
 				continue;
 			}
-			prevtype = type;
-			content = mexpr[i].content.toLowerCase();
-			type = mexpr[i].type;
+			prevtype	= type;
+			content		= mexpr[i].content.toLowerCase();
+			type		= mexpr[i].type;
 			if ( (isIn(type, numberTypes) || isIn(type, identifierTypes)) && (isIn(prevtype, numberTypes) || isIn(prevtype, identifierTypes)) ){
 				expr += '*';
 			}
@@ -183,15 +183,16 @@
 	}
 
 	function Result(data, type, original, numeric){
-		if (this.constructor !== Result){
+		var self = this;
+		if (!(self instanceof Result)){
 			return new Result(data, type, original, numeric);
 		}
-		this.data = data;
-		this.type = type;
-		this.original = original;
-		this.value = numeric;
-		this.toString = function(){
-			return this.data;
+		self.data	= data;
+		self.type	= type;
+		self.original	= original;
+		self.value	= numeric;
+		self.toString	= function(){
+			return self.data;
 		};
 	}
 
@@ -200,26 +201,18 @@
 			var	expr	= createExpr(mexpr),
 				func	= new Function( 'var g = arguments[0]; return ""+(' + expr + ')' ),
 				ans, result, num;
-			if (mode === undefined){
-				mode = 10;
-			}
+			mode === undefined && (mode = 10);
 			num = func(globalBindings);
 			if (num[0] === '$'){
 				return Result(num.substr(1), 'help');
 			}
 			result = num;
 			num = Number(num);
-			if (isNaN(num)){
-				num = 0;
-			}
+			isNaN(num) && (num = 0);
 			answers.unshift(num);
 			if (!isNaN(result)){
 				result = Number(result).toString(mode);
-				if (modePrefixes[mode] !== undefined){
-					result = modePrefixes[mode] + result;
-				} else {
-					result = 'base(' + result + ', ' + mode + ')';
-				}
+				result = modePrefixes[mode] !== undefined ? modePrefixes[mode] + result : 'base(' + result + ', ' + mode + ')';
 			}
 			return Result(result, 'result', writeDown(mexpr), num);
 		} catch(e){
@@ -245,11 +238,12 @@
 	assignGlobals();
 	generateHelps();
 
-	global.calculatoure		= calculatoure;
+	global.calculatoure		= 
 	calculatoure.calculate		= calculatoure;
 	calculatoure.help		= helpData;
 	calculatoure.version		= version;
 	calculatoure.autoComplete	= autoComplete;
 	calculatoure.addFunction	= addFunction;
+	calculatoure.global		= globalBindings;
 
 }(CodeExpression, this));
