@@ -1,19 +1,37 @@
+Calculatoure
+============
 Calculatoure is a very slick, versatile and easy to use scientific calculator made with HTML5. Perform complex mathematical calculations including trigonometry, algebra, base conversion and bitwise operations. Works offline (as a Chrome app).
 
-Build requirements:
+Build requirements
+------------------
 makejs: http://www.github.com/jussi-kalliokoski/makejs/
 
-API manual:
+API manual
+----------
 First, build it:
+´´´
 $ makejs
+´´´
 Then grab the calculatoure.api.(jgz or js, whichever you wish to serve, or both)
 Use a script tag to include it.
-Voila, you can use the api, try typing alert(calculatoure('2pi')) into your js console to see if it works.
+Voila, you can use the api, try typing
+´´´javascript
+alert(calculatoure('2pi'))
+´´´
+into your js console to see if it works.
 
-CLI instructions:
+CLI instructions
+----------------
+
 First, build it and then install:
+´´´shell
 $ makejs cli; cd cli; sudo makejs install; cd ..
-And then you can use "calculatoure" in the bash to start the application. ctrl+c to quit.
+´´´
+And then you can use
+´´´shell
+$ calculatoure
+´´´
+in the bash to start the application. ctrl+c to quit.
 
 Changelog:
 
