@@ -41,7 +41,8 @@ $ calculatoure
 
 in the bash to start the application. ctrl+c to quit.
 
-Changelog:
+Changelog
+---------
 
 2011/04/08: v.0.9991 (1RC2)
 
