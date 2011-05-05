@@ -44,14 +44,14 @@ in the bash to start the application. ctrl+c to quit.
 Changelog
 ---------
 
-2011/04/08: v.0.9991 (1RC2)
+### 2011/04/08: v.0.9991 (1RC2)
 
  * Some final patching up.
 
  * More keyboard shortcuts (try shift + directional buttons).
 
 
-2011/04/07: v.0.999
+### 2011/04/07: v.0.999
 
  * Auto-Completion via TAB button.
 
@@ -64,12 +64,12 @@ Changelog
  * Some other big changes I can't remember.
 
 
-2011/02/13: v.0.998
+### 2011/02/13: v.0.998
 
  * Option to disable reflection
 
 
-2011/02/06: v.0.997
+### 2011/02/06: v.0.997
 
  * Easier to share
 
@@ -78,7 +78,7 @@ Changelog
  * History works nicer now.
 
 
-2011/01/24: v.0.995
+### 2011/01/24: v.0.995
 
  * Readme
 
@@ -91,23 +91,23 @@ Changelog
  * help() recognizes rand and ans now
 
 
-v.0.994
+### v.0.994
 
  * Updated to the newest version of CodeExpression.
 
  * Fixed a bug to do with % not working.
 
 
-2011/01/14: v. 0.993
+### 2011/01/14: v. 0.993
 
  * Repackaged (Chrome app) to work offline!
 
-NOTE (for Chrome app users): If you have installed prior to this update, you should reinstall (uninstall & install).
+ * NOTE (for Chrome app users): If you have installed prior to this update, you should reinstall (uninstall & install).
 
  * To make things faster, you should bind a hotkey for Calculatoure (a guide: http://goo.gl/MMzTk )
 
 
-2011/01/13: v. 0.992 (Loads of cool new features!)
+### 2011/01/13: v. 0.992 (Loads of cool new features!)
 
  * Now supports base conversions 2-16 fully (see help(base))
 
@@ -123,7 +123,8 @@ NOTE (for Chrome app users): If you have installed prior to this update, you sho
 
  * Fixed a critical bug for decimals starting with a zero
 
-2011/01/04: v. 0.991 (1.0RC1, r16)
+
+### 2011/01/04: v. 0.991 (1.0RC1, r16)
 
  * New design to increase productivity, functionality and eyecandy.
 
