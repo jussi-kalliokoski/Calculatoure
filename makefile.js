@@ -11,6 +11,7 @@ function extensions(){
 function api(){
 	shell('cd api; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
 }
+
 function cli(){
 	shell('cd cli; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
 }

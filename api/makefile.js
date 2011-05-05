@@ -37,7 +37,6 @@ function all(){
 }
 
 function commonjs(){
-	all();
 	console.log('Installing commonjs extension...');
 	shell('mkdir ~/.node_modules/calculatoure/ -p');
 	shell('cp calculatoure.api.js ~/.node_modules/calculatoure/index.js');
@@ -52,3 +51,5 @@ function clean(){
 }
 
 Build.createBuild(all, ['calculatoure.api.js'], ['deps/CodeExpression.js/CodeExpression.full.js', 'js']);
+Build.createBuild(commonjs, [], [all]);
+Build.createBuild(test, [], [commonjs]);

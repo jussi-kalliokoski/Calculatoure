@@ -1,3 +1,7 @@
+/**
+ * @author Jussi Kalliokoski
+ * @version /*# result += version; */
+*/
 (function(CodeExpression, global){
 	var	version		= /*# result += version; */,
 		helpData	= [],
@@ -14,6 +18,13 @@
 		parensClosers	= [']', '}', ')'],
 		parensOperators	= parensOpeners.concat(parensClosers);
 
+/**
+ * Checks if object is in an array.
+ *
+ * @private
+ * @param needle The object to seek for within the array.
+ * @param {Array} haystack The array to seek within.
+*/
 	function isIn(needle, haystack){
 		var i, l = haystack.length;
 		for (i=0; i<l; i++){
@@ -24,6 +35,13 @@
 		return false;
 	}
 
+/**
+ * Binds an item to the global scope of the Calculatoure.
+ *
+ * @private
+ * @param {String} name The variable name with which the object is bound to the global scope.
+ * @param content The object to be bound.
+*/
 	function defineGlobal(name, content){
 		Object.defineProperty(globalBindings, name, {
 			get: function(){
@@ -33,6 +51,11 @@
 		});
 	}
 
+/**
+ * Handles assigning the default list of items in the global scope.
+ *
+ * @private
+*/
 	function assignGlobals(){
 		var i;
 		for (i=0; i<mathFunctions.length; i++){
@@ -55,14 +78,35 @@
 
 	// Custom functions
 
+/**
+ * Iterates the sum of all the numbers in an unsigned integer until it is reduced to only one number.
+ *
+ * @private
+ * @param {number} num The number to whack.
+ * @return {number} The whacked number.
+*/
 	function whack(num){
 		return (num-1) % 9 + 1;
 	}
 
+/**
+ * Removes the integer part of a number and returns only the fraction part.
+ *
+ * @private
+ * @param {number} The number to perform the operation on.
+ * @return {number} The fraction part of the number.
+*/
 	function frac(num){
 		return num - Math.floor(num);
 	}
 
+/**
+ * Returns the help entry for a specified function.
+ *
+ * @private
+ * @param {Function} about The function to seek the help entry for.
+ * @return {String} The helpdata for specified function.
+*/
 	function help(about){
 		var i;
 		for (i=0; i<helpData.length; i++){
@@ -73,14 +117,34 @@
 		return '$help:<br />type help(&lt;function name&gt;) to get help with that specific function.';
 	}
 
+/**
+ * Returns the Calculatoure's answer i operations backwards.
+ *
+ * @private
+ * @param {number} i The number of operations before the current answer.
+ * @return The answer of the specified operation.
+*/
 	function ans(i){
 		return answers[i] || 0;
 	}
 
+/**
+ * Returns a random number based on a seed.
+ *
+ * @private
+ * @param {number} b The seed.
+ * @return {number} A random number.
+*/
 	function rand(b){
 		return Math.random(b);
 	}
 
+/**
+ * Attempts to autoComplete a Calculatoure expression.
+ *
+ * @param {String} data The expression to perform the operation on.
+ * @return {Array} The suggested ways to complete the expression.
+*/
 	function autoComplete(data){
 		var	results = [],
 			word	= /[\$_a-z][\$_a-z0-9]*$/i.exec(data),
@@ -100,15 +164,33 @@
 		return results;
 	}
 
+/**
+ * Creates a help entry for a specified function.
+ *
+ * @private
+ * @param {String} name The name of the function.
+ * @param {Function} func The function to create the help entry for.
+ * @param {String} help The help entry for the function.
+*/
 	function createHelp(name, func, help){
 		helpData.push({n: name, f: func, h: help});
 	}
 
+/**
+ * Binds a function to the global scope and creates a help entry for it.
+ *
+ * @param {String} name The name of the function.
+ * @param {Function} func The function to bind.
+ * @param {String} help (Optional) The help entry for the function.
+*/
 	function addFunction(name, func, help){
 		defineGlobal(name, func);
 		help && createHelp(name, func, help);
 	}
 
+/**
+ * Handles assigning the help entries for internal functions and variables.
+*/
 	function generateHelps(){
 		createHelp('ans', ans, 'ans(n) returns the n:th answer and ans returns ans(0).');
 		createHelp('random', rand, 'random (or rand) is a random number. Use as a constant.');
@@ -142,6 +224,13 @@
 		rand.toString = function(){ return rand(); };
 	}
 
+/**
+ * Pre-parses and compiles a CodeExpression for calculation.
+ *
+ * @private
+ * @param {CodeExpression} mexpr The CodeExpression to perform the operation on.
+ * @return {Function} The compiled expression.
+*/
 	function createExpr(mexpr){
 		var i, expr = '', content, type, prevtype;
 		for(i=0; i < mexpr.length; i++){
@@ -167,9 +256,16 @@
 				throw 'Unexpected ' + type;
 			}
 		}
-		return expr;
+		return new Function( 'var g = arguments[0]; return ""+(' + expr + ')' );
 	}
 
+/**
+ * Generates a human readable representation of a CodeExpression object.
+ *
+ * @private
+ * @param {CodeExpression} mexpr The CodeExpression to perform the operation on.
+ * @return {String} A human readable representation of the CodeExpression object.
+*/
 	function writeDown(mexpr){
 		var i, s = [];
 		for(i=0; i<mexpr.length; i++){
@@ -182,6 +278,17 @@
 		return s.join(' ');
 	}
 
+/**
+ * Creates a Result object of the given parameters.
+ *
+ * @private
+ * @constructor
+ * @this Result
+ * @param data The uncasted result.
+ * @param {String} type The type of the result.
+ * @param {String} original The original expression.
+ * @param {number} numeric The numeric value of the result.
+*/
 	function Result(data, type, original, numeric){
 		var self = this;
 		if (!(self instanceof Result)){
@@ -191,18 +298,27 @@
 		self.type	= type;
 		self.original	= original;
 		self.value	= numeric;
+/**
+ * Returns the uncasted data attached to the Result.
+*/
 		self.toString	= function(){
 			return self.data;
 		};
 	}
 
+/**
+ * Calculates a CodeExpression and returns the Result of it, in the selected base.
+ *
+ * @param {CodeExpression} mexpr The CodeExpression to calculate.
+ * @param {number} mode The base in which to return the answer.
+ * @return {Result} The Result object of the expression.
+*/
 	function calculate(mexpr, mode){
 		try{
 			var	expr	= createExpr(mexpr),
-				func	= new Function( 'var g = arguments[0]; return ""+(' + expr + ')' ),
 				ans, result, num;
 			mode === undefined && (mode = 10);
-			num = func(globalBindings);
+			num = expr(globalBindings);
 			if (num[0] === '$'){
 				return Result(num.substr(1), 'help');
 			}
@@ -220,6 +336,13 @@
 		}
 	}
 
+/**
+ * Pre-parses a string and calculates the CodeExpression representation of it.
+ *
+ * @param {String} c The expression to perform the operation on.
+ * @param {number} m The base in which to return the answer.
+ * @return {Result} The result object of the expression.
+*/
 	function calculatoure(c, m){
 		var	open	= [0, 0, 0],
 			closed	= [0, 0, 0],
@@ -244,6 +367,9 @@
 	calculatoure.version		= version;
 	calculatoure.autoComplete	= autoComplete;
 	calculatoure.addFunction	= addFunction;
+/**
+ * The global scope object of Calculatoure.
+*/
 	calculatoure.global		= globalBindings;
 
 }(CodeExpression, this));
