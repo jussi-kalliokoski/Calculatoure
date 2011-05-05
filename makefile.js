@@ -1,4 +1,5 @@
-var version = 0.9991;
+var	version		= 0.9991,
+	_unitTests	= makejs.flags.indexOf('--unit-tests') !== -1;
 
 function webapp(){
 	shell('cd webapp; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
@@ -9,7 +10,11 @@ function extensions(){
 }
 
 function api(){
-	shell('cd api; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
+	if (_unitTests){
+		shell('cd api; makejs test -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
+	} else {
+		shell('cd api; makejs -v ' + version + ' --passed-flags ' + makejs.rawFlags.join(' '));
+	}
 }
 
 function cli(){

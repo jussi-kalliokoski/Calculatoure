@@ -11,7 +11,7 @@ API manual
 First, build it:
 
 ```
-$ makejs
+$ makejs api
 ```
 
 Then grab the calculatoure.api.(jgz or js, whichever you wish to serve, or both)
@@ -23,6 +23,12 @@ alert(calculatoure('2pi'))
 ```
 
 into your js console to see if it works.
+
+You can also run the unit tests: (requires NodeJS or a browser)
+
+```shell
+$ makejs api --unit-tests 
+```
 
 CLI instructions
 ----------------
