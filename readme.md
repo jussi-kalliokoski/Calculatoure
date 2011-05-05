@@ -15,22 +15,22 @@ $ makejs
 Then grab the calculatoure.api.(jgz or js, whichever you wish to serve, or both)
 Use a script tag to include it.
 Voila, you can use the api, try typing
-´´´javascript
+```javascript
 alert(calculatoure('2pi'))
-´´´
+```
 into your js console to see if it works.
 
 CLI instructions
 ----------------
 
 First, build it and then install:
-´´´shell
+```shell
 $ makejs cli; cd cli; sudo makejs install; cd ..
-´´´
+```
 And then you can use
-´´´shell
+```shell
 $ calculatoure
-´´´
+```
 in the bash to start the application. ctrl+c to quit.
 
 Changelog:
