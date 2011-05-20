@@ -250,3 +250,11 @@ input
 	border-width: 0px;
 }
 /*# } */
+
+@media (max-width:1100px)
+{
+	#html5logo
+	{
+		display: none;
+	}
+}
