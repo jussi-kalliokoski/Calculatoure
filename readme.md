@@ -50,6 +50,15 @@ in the bash to start the application. ctrl+c to quit.
 Changelog
 ---------
 
+### 2011/07/11: v.0.9992 (1RC3)
+
+ * Added literals for logical bitwise operations (AND, OR, XOR, NOT)
+
+ * Updated logo.
+
+ * Deprecated unusable parts of JS from the syntax parser.
+
+
 ### 2011/04/08: v.0.9991 (1RC2)
 
  * Some final patching up.

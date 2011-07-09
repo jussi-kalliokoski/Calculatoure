@@ -1,4 +1,4 @@
-var	version		= 0.9991,
+var	version		= 0.9992,
 	_unitTests	= makejs.flags.indexOf('--unit-tests') !== -1;
 
 function webapp(){
