@@ -116,7 +116,9 @@ function webkit(){
 
 	manifest		= Conditional.parseJS(manifest, flags)();
 	save('out/webkit/manifest.json', manifest);
-	shell('cp ../img/calculatoure.png out/webkit/icon_128.png; cp ../img/favicon.png out/webkit/icon_16.png');
+	shell('cp ../img/shortcut.png out/webkit/');
+	shell('cp ../img/calculatoure.png out/webkit/');
+	shell('cp ../img/launcher.png out/webkit/');
 	shell('cd out/webkit/; zip calculatoure *');
 }
 
