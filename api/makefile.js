@@ -7,7 +7,7 @@ import('build.js');
 
 function all(){
 	console.log('Making Calculatoure API...');
-	shell('cd deps/CodeExpression.js/; makejs --just JavaScript');
+	shell('cd deps/CodeExpression.js/; makejs --just Calculatoure');
 	
 	var	sameFlags	= false,
 		data		= '';

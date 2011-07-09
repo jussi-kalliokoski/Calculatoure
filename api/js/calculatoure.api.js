@@ -10,9 +10,14 @@
 		acceptAsIs	= ['+','-','/','*','%','(',')',',',':','?','^','~','&&','&','||','|','>','>>','>>>','<','<<','>=','<=','!','!=','!==','=','==','==='],
 		mathFunctions	= ['pow','sin','asin','cos','acos','tan','atan','atan2','floor','ceil','round','abs','sqrt','max','min','log','exp'],
 		mathConsts	= ['e', 'pi', 'sqrt2', 'sqrt1_2', 'ln2', 'ln10', 'log2e', 'log10e'],
-		identifierTypes	= ['Identifier', 'Word'],
-		numberTypes	= ['Number', 'Hexadecimal', 'Octal'],
+		numberTypes	= ['Number', 'Hexadecimal', 'Octal', 'Degal'],
 		modePrefixes	= {'8': '0', '10': '', '16': '0x'},
+		opLiterals	= {
+			'AND':	'&',
+			'OR':	'|',
+			'XOR':	'^',
+			'NOT':	'~'
+		},
 		parensOpMatch	= /[\x7b\x7d\x5b\x5d\x28\x29]/g,
 		parensOpeners	= ['[', '{', '('],
 		parensClosers	= [']', '}', ')'],
@@ -240,7 +245,7 @@
 			prevtype	= type;
 			content		= mexpr[i].content.toLowerCase();
 			type		= mexpr[i].type;
-			if ( (isIn(type, numberTypes) || isIn(type, identifierTypes)) && (isIn(prevtype, numberTypes) || isIn(prevtype, identifierTypes)) ){
+			if ( (isIn(type, numberTypes) || type === 'Identifier') && (isIn(prevtype, numberTypes) || prevtype === 'Identifier') ){
 				expr += '*';
 			}
 
@@ -248,8 +253,10 @@
 				expr += content;
 			} else if (isIn(content, acceptAsIs)) {
 				expr += content;
-			} else if (type === 'Identifier' || type === 'Word'){
+			} else if (type === 'Identifier'){
 				expr += 'g["'+content+'"]';
+			} else if (type === 'Operator' && opLiterals[content.toUpperCase()]) {
+				expr += opLiterals[content.toUpperCase()];
 			} else if (type === 'Operator' && isIn(content, parensOperators)) {
 				expr += isIn(content, parensOpeners) ? '(' : ')';
 			} else {
@@ -355,7 +362,7 @@
 				c += parensClosers[i];
 			}
 		}
-		return calculate( new CodeExpression(c, 'JavaScript'), m );
+		return calculate( new CodeExpression(c, 'Calculatoure'), m );
 	}
 
 	assignGlobals();
